@@ -3,7 +3,7 @@
     <h2 class="section-title">推荐歌单<i class="icon-arrow"></i></h2>
     <ul class="songsheet-list section-list" v-if='recommendSongSheetData.length !== 0'>
       <li v-for='songSheet in recommendSongSheetData'>
-        <a href="###">
+        <router-link to='SongSheet'>
           <div class="songsheet-cover-box">
             <img :src='songSheet.picUrl' :alt='songSheet.copywriter'>
             <p class="play-count">
@@ -14,7 +14,7 @@
           <div class="songsheet-descript song-descript">
             <p>{{ songSheet.name }}</p>
           </div>
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -58,14 +58,6 @@ export default {
 .songsheet-list li a .songsheet-cover-box {
   height: 2.46rem;;
   position: relative;
-}
-
-.songsheet-list li a .songsheet-cover-box .play-count .icon-headset {
-  display: inline-block;
-  width: 0.21rem;
-  height: 0.19rem;
-  background: url('../../../assets/images/icon-headset.png') no-repeat;
-  background-size: cover;
 }
 
 .songsheet-list li a .songsheet-descript {

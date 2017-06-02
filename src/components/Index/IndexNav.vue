@@ -35,12 +35,14 @@ export default {
   width: 100%;
   font-size: 0.2rem;
   color: #fff;
+  background: rgba(0,0,0,0.8);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
 }
 
 .index-nav ul {
   display: flex;
   height: 0.98rem;
-  background: #39393a;
 }
 
 .index-nav ul li {

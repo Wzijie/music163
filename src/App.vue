@@ -34,6 +34,13 @@ img {
   height: 100%;
 }
 
+.text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/*发现音乐组件的各板块列表 start*/
 .section-list {
   display: flex;
   justify-content: space-around;
@@ -46,22 +53,6 @@ img {
 
 .section-list li a {
   display: block;
-}
-
-.section-list li a div .play-count {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  font-size: 0.28rem;
-  color: #fff;
-  text-align: right;
-  line-height: 2;
-  background-color: rgba(0,0,0,0.6);
-  background: -webkit-linear-gradient(top, rgba(0,0,0,0.8), rgba(0,0,0,0));
-}
-
-.section-list li a div .play-count span {
-    margin-right: 0.2rem;
 }
 
 .section-title {
@@ -82,7 +73,36 @@ img {
   vertical-align: middle;
   margin-left: 0.18rem;
 }
+/*发现音乐组件的各板块列表 end*/
 
+/*封面顶部的播放次数 start*/
+.play-count {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  font-size: 0.28rem;
+  color: #fff;
+  text-align: right;
+  line-height: 2;
+  background-color: rgba(0,0,0,0.6);
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+}
+
+.play-count span {
+    margin-right: 0.2rem;
+}
+/*封面顶部的播放次数 end*/
+
+/*耳机图标*/
+.icon-headset {
+  display: inline-block;
+  width: 0.21rem;
+  height: 0.19rem;
+  background: url('./assets/images/icon-headset.png') no-repeat;
+  background-size: cover;
+}
+
+/*歌曲描述*/
 .song-descript {
   height: 0.66rem;
   font-size: 0.24rem;
