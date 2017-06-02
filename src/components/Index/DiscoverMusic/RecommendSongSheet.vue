@@ -3,7 +3,7 @@
     <h2 class="section-title">推荐歌单<i class="icon-arrow"></i></h2>
     <ul class="songsheet-list section-list" v-if='recommendSongSheetData.length !== 0'>
       <li v-for='songSheet in recommendSongSheetData'>
-        <router-link to='SongSheet'>
+        <a href="###">
           <div class="songsheet-cover-box">
             <img :src='songSheet.picUrl' :alt='songSheet.copywriter'>
             <p class="play-count">
@@ -14,7 +14,7 @@
           <div class="songsheet-descript song-descript">
             <p>{{ songSheet.name }}</p>
           </div>
-        </router-link>
+        </a>
       </li>
     </ul>
   </div>

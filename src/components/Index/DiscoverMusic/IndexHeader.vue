@@ -8,22 +8,20 @@
         <i class="icon-search"></i>
         <input type="text" class="search-input" placeholder="搜索音乐、歌词、电台">
       </form>
-      <MusicPlayingLink></MusicPlayingLink>
+      <router-link to="/MusicPlayer" class='link-music-player'>
+        <i class="icon-music-play"></i>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import MusicPlayingLink from '@/components/MusicPlayingLink';
 export default {
   name: 'IndexHeader',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
-  },
-  components: {
-    'MusicPlayingLink': MusicPlayingLink
   }
 }
 </script>
@@ -88,5 +86,21 @@ export default {
   background-size: cover;
   position: absolute;
   top: 0.16rem; left: 0.2rem;
+}
+
+.search .link-music-player {
+  display: block;
+  width: 0.6rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
+
+.search .link-music-player .icon-music-play {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: url('../../../assets/images/icon-music-play.png') no-repeat;
+  background-size: cover;
+  vertical-align: middle;
 }
 </style>

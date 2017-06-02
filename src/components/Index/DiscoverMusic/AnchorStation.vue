@@ -7,7 +7,7 @@
           <div class="station-cover">
             <img :src='station.picUrl' :alt='station.copywriter'>
             <div class="station-author">
-              <p>{{ station.program.dj.brand }}</p>
+              <p>{{ station.program.dj.nickname }}</p>
               <span>
                 <i class="icon-triangle"></i>
               </span>
@@ -60,7 +60,7 @@ export default {
 }
 
 .station-list li a .station-cover .station-author p {
-  width: 1.8rem;
+  width: 1.85rem;
   font-size: 0.24rem;
   color: #fff;
   overflow: hidden;
