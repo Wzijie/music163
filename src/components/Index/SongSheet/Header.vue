@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <router-link to='DiscoverMusic' class='goback'>
+    <router-link to='/index/DiscoverMusic' class='goback'>
       <i class="icon-goback"></i>
     </router-link>
     <h2 class="songsheet-title">这里是歌单标题</h2>

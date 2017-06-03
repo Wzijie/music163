@@ -3,7 +3,7 @@
     <h2 class="section-title">推荐歌单<i class="icon-arrow"></i></h2>
     <ul class="songsheet-list section-list" v-if='recommendSongSheetData.length !== 0'>
       <li v-for='songSheet in recommendSongSheetData'>
-        <router-link to='SongSheet'>
+        <router-link :to='routerLinkURL(songSheet.id)'>
           <div class="songsheet-cover-box">
             <img :src='songSheet.picUrl' :alt='songSheet.copywriter'>
             <p class="play-count">
@@ -32,6 +32,9 @@ export default {
   methods: {
     toTenThousandUnits: function (num) {
       return num > 10000 ? (num / 10000).toFixed(1) + '万' : num;
+    },
+    routerLinkURL: function (id) {
+      return 'SongSheet/' + id;
     }
   }
 }

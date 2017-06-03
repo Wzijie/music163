@@ -4,14 +4,19 @@
     <songsheetHeader></songsheetHeader>
     <SongsheetInfo></SongsheetInfo>
     <SongsheetOperation></SongsheetOperation>
+    <SongList></SongList>
+    <p>{{$route.params.id}}</p>
   </div>
 </template>
 
 <script>
+import ajaxRequest from '@/plugs/ajaxRequest';
+
 import BlurBg from './BlurBg';
 import Header from './Header';
 import SongsheetInfo from './SongsheetInfo';
 import SongsheetOperation from './SongsheetOperation';
+import SongList from './SongList';
 export default {
   name: 'song-sheet',
   data () {
@@ -23,7 +28,20 @@ export default {
     'BlurBg': BlurBg,
     'songsheetHeader': Header,
     'SongsheetInfo': SongsheetInfo,
-    'SongsheetOperation': SongsheetOperation
+    'SongsheetOperation': SongsheetOperation,
+    'SongList': SongList
+  },
+  mounted: function () {
+    var songsheetSuccess = (data) => {
+      console.log(data);
+    }
+    var songsheetError = (error) => {
+      console.log(error);
+    }
+    console.log(this.$route.params.id);
+    var songsheetURL = `http://localhost:3000/playlist/detail?id=${this.$route.params.id}`;
+    console.log(songsheetURL);
+    ajaxRequest(songsheetURL, 'GET', songsheetSuccess, songsheetError);
   }
 }
 </script>

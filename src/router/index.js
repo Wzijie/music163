@@ -37,7 +37,7 @@ export default new Router({
           component: MyMusic
         },
         {
-          path: 'SongSheet',
+          path: 'SongSheet/:id',
           component: SongSheet
         }
       ]

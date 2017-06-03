@@ -56,7 +56,7 @@ export default {
   mounted () {
     // 焦点图数据
     var bannerDataSuccess = (data) => {
-      console.log(data, '焦点图数据');
+      console.log(data.banners.slice(), '焦点图数据');
       this.bannerData.push(...data.banners);
     }
     var bannerDataError = (error) => {
