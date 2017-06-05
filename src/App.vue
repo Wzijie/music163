@@ -40,6 +40,12 @@ img {
   white-space: nowrap;
 }
 
+.loading-text {
+  font-size: 0.38rem;
+  padding: 1rem 0;
+  background: #fff;
+}
+
 /*发现音乐组件的各板块列表 start*/
 .section-list {
   display: flex;

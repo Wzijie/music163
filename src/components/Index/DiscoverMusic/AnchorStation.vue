@@ -1,7 +1,8 @@
 <template>
   <div class="anchor-station">
     <h2 class="section-title">主播电台<i class="icon-arrow"></i></h2>
-    <ul class="station-list section-list">
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul class="station-list section-list" v-else>
       <li v-for='station in anchorStationData'>
         <a href="###">
           <div class="station-cover">
@@ -29,6 +30,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  computed: {
+    loading: function () {
+      return this.anchorStationData.length === 0;
     }
   }
 }

@@ -1,7 +1,8 @@
 <template>
   <div class="recommend-mv">
     <h2 class="section-title">推荐MV<i class="icon-arrow"></i></h2>
-    <ul class="mv-list section-list">
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul class="mv-list section-list" v-else>
       <li v-for='mv in recommendMvData'>
         <a href="###">
           <div class="mv-cover">
@@ -28,6 +29,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  computed: {
+    loading: function () {
+      return this.recommendMvData.length === 0;
     }
   },
   methods: {

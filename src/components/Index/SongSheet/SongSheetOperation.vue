@@ -4,19 +4,19 @@
       <li>
         <a href="###">
           <i class="icon-collection"></i>
-          <p>7777</p>
+          <p>{{ songsheetInfoLoading.subscribedCount }}</p>
         </a>
       </li>
       <li>
         <a href="###">
           <i class="icon-comment"></i>
-          <p>7777</p>
+          <p>{{ songsheetInfoLoading.commentCount }}</p>
         </a>
       </li>
       <li>
         <a href="###">
           <i class="icon-share"></i>
-          <p>7777</p>
+          <p>{{ songsheetInfoLoading.shareCount }}</p>
         </a>
       </li>
       <li>
@@ -32,9 +32,23 @@
 <script>
 export default {
   name: 'songsheet-operation',
+  props: [ 'songsheetData' ],
   data () {
     return {
       
+    }
+  },
+  computed: {
+    songsheetInfoLoading: function () {
+      if (Object.keys(this.songsheetData).length !== 0) {
+        return this.songsheetData;
+      } else {
+        return {
+          subscribedCount: '正在加载...',
+          commentCount: '正在加载...',
+          shareCount: '正在加载...'
+        }
+      }
     }
   }
 }

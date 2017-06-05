@@ -1,25 +1,28 @@
 <template>
   <div class='banner'>
-    <ul class='slide' v-if='bannerData.length !== 0'>
-      <li>
-        <a :href='lastBanner.url'>
-          <img :src='lastBanner.pic' :alt='lastBanner.typeTitle' />
-        </a>
-      </li>
-      <li v-for='(bannerItem, index) in bannerData' :key='index'>
-        <a :href='bannerItem.url'>
-          <img :src='bannerItem.pic' :alt='bannerItem.typeTitle' />
-        </a>
-      </li>
-      <li>
-        <a :href='firstBanner.url'>
-          <img :src='firstBanner.pic' :alt='firstBanner.typeTitle' />
-        </a>
-      </li>
-    </ul> 
-    <ul class="slide-active">
-      <li v-for='bannerItem in bannerData' :key='bannerItem'></li>
-    </ul>
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <template v-else>
+      <ul class='slide'>
+        <li>
+          <a :href='lastBanner.url'>
+            <img :src='lastBanner.pic' :alt='lastBanner.typeTitle' />
+          </a>
+        </li>
+        <li v-for='(bannerItem, index) in bannerData' :key='index'>
+          <a :href='bannerItem.url'>
+            <img :src='bannerItem.pic' :alt='bannerItem.typeTitle' />
+          </a>
+        </li>
+        <li>
+          <a :href='firstBanner.url'>
+            <img :src='firstBanner.pic' :alt='firstBanner.typeTitle' />
+          </a>
+        </li>
+      </ul> 
+      <ul class="slide-active">
+        <li v-for='bannerItem in bannerData' :key='bannerItem'></li>
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -39,6 +42,9 @@ export default {
     },
     lastBanner: function () {
       return this.bannerData[this.bannerData.length - 1];
+    },
+    loading: function () {
+      return this.bannerData.length === 0;
     }
   },
   updated: function () {

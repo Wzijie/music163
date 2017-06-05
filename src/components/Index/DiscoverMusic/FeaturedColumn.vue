@@ -1,7 +1,8 @@
 <template>
   <div class="featured-column">
     <h2 class="section-title">精选专栏<i class="icon-arrow"></i></h2>
-    <ul class="column-list">
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul class="column-list" v-else>
       <li v-for='column in featuredColumnData'>
         <a href="###">
           <div class="column-info">
@@ -26,6 +27,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  computed: {
+    loading: function () {
+      return this.featuredColumnData.length === 0;
     }
   },
   methods: {

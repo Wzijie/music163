@@ -1,25 +1,26 @@
 <template>
   <div class="song-list">
-    <ul>
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul v-else>
       <li class="play-all">
         <span class="song-order">
           <i class="icon-play"></i>
         </span>
         <div class="song-info">
           <a href="###">
-            <p>播放全部<span class="song-count">(共99首)</span></p>
+            <p>播放全部<span class="song-count">(共{{ songsheetData.trackCount }}首)</span></p>
           </a>
           <span class="song-detail">
             <i class="icon-detail"></i>
           </span>
         </div>
       </li>
-      <li>
-        <span class="song-order">1</span>
+      <li v-for='(song, index) in songsheetData.tracks'>
+        <span class="song-order">{{ index + 1 }}</span>
         <div class="song-info">
           <a href="###">
-            <p class="song-name">这里是歌名</p>
-            <p class="song-author-info">这里是作者</p>
+            <p class="song-name text-overflow">{{ song.name }}</p>
+            <p class="song-author-info text-overflow">{{ singerName(song.ar, song.name) }}</p>
           </a>
           <span class="song-detail">
             <i class="icon-detail"></i>
@@ -33,9 +34,28 @@
 <script>
 export default {
   name: 'song-list',
+  props: [ 'songsheetData' ],
   data () {
     return {
       
+    }
+  },
+  computed: {
+    loading: function () {
+      return Object.keys(this.songsheetData).length === 0;
+    }
+  },
+  methods: {
+    singerName: function (singerArr, songName) {
+      var singerStr = '';
+      if (singerArr.length === 1) {
+        return `${singerArr[0].name} - ${songName}`; 
+      } else {
+        singerArr.forEach((singer, index) => {
+          singerStr = singerStr + singer.name + ' / ';
+        });
+        return `${singerStr} - ${songName}`; 
+      } 
     }
   }
 }
@@ -43,6 +63,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.song-list {
+  padding-bottom: 1rem;
+}
 .song-list ul li {
   display: flex;
   align-items: center;

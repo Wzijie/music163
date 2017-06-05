@@ -1,7 +1,8 @@
 <template>
   <div class="newest-music">
     <h2 class="section-title">最新音乐<i class="icon-arrow"></i></h2>
-    <ul class="newmusic-list section-list" v-if='newestMusicData.length !== 0'>
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul class="newmusic-list section-list" v-else>
       <li v-for='music in newestMusicData'>
         <a href="###">
           <div class="newmusic-cover">
@@ -24,6 +25,11 @@ export default {
   data () {
     return {
 
+    }
+  },
+  computed: {
+    loading: function () {
+      return this.newestMusicData.length === 0;
     }
   }
 }

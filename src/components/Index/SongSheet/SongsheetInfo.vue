@@ -1,21 +1,21 @@
 <template>
   <div class="songsheet-info">
     <div class="songsheet-cover">
-      <img src="http://p4.music.126.net/6grgnvPxRAbW4AFEr-TlGg==/19072128695547028.jpg?param=200y200" alt="1">
+      <img :src='songsheetInfo.picUrl' :alt='songsheetInfo.name'>
       <p class="play-count">
         <i class="icon-headset"></i>
-        <span>22222</span>
+        <span>{{ toTenThousandUnits(songsheetInfo.playCount) }}</span>
       </p>
       <i class="icon-detail-info">i</i>
     </div>
     <div class="songsheet-title-author">
-      <h2 class="title">这里是歌单标题 这里是歌单标题 这里是歌单标题</h2>
+      <h2 class="title">{{ songsheetInfo.name }}</h2>
       <div class="author">
         <div class="author-face">
-          <img src="http://p4.music.126.net/6grgnvPxRAbW4AFEr-TlGg==/19072128695547028.jpg?param=200y200" alt="1">
+          <img :src='songsheetInfoLoading.creator.avatarUrl' :alt='songsheetInfoLoading.creator.nickname'>
           <span class="author-label"></span>
         </div>
-        <p class="author-name text-overflow">这里是歌单作者名字</p>
+        <p class="author-name text-overflow">{{ songsheetInfoLoading.creator.nickname }}</p>
         <i class="icon-right-arrow">&gt;</i>
       </div>
     </div>
@@ -25,9 +25,40 @@
 <script>
 export default {
   name: 'songsheet-info',
+  props: [ 'songsheetData' ],
   data () {
     return {
       
+    }
+  },
+  computed: {
+    songsheetInfoLoading: function () {
+      if (Object.keys(this.songsheetData).length !== 0) {
+        return this.songsheetData;
+      } else {
+        return {
+          name: '正在加载...',
+          playCount: 0,
+          creator: {
+            avatarUrl: '/static/default-img.png',
+            nickname: '正在加载...'
+          }
+        }
+      }
+    },
+    songsheetInfo: function () {
+      var songsheetInfo = null;
+      this.$store.state.recommendSongSheet.forEach((songsheet) => {
+        if (songsheet.id === parseInt(this.$route.params.id)) {
+          songsheetInfo = songsheet;
+        }
+      });
+      return songsheetInfo;
+    }
+  },
+  methods: {
+    toTenThousandUnits: function (num) {
+      return num > 100000 ? (num / 10000).toFixed(1) + '万' : num;
     }
   }
 }

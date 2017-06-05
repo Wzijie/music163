@@ -1,9 +1,10 @@
 <template>
   <div class="header">
+    <div class="blur-img" :style='{ "background-image": `url(${songsheetCoverReady})` }'></div>
     <router-link to='/index/DiscoverMusic' class='goback'>
       <i class="icon-goback"></i>
     </router-link>
-    <h2 class="songsheet-title">这里是歌单标题</h2>
+    <h2 class="songsheet-title">歌单</h2>
     <div class="music-playing">
       <MusicPlayingLink></MusicPlayingLink>
     </div>
@@ -15,9 +16,24 @@
 import MusicPlayingLink from '@/components/MusicPlayingLink';
 export default {
   name: 'songsheet-header',
+  props: [ 'songsheetCover' ],
   data () {
     return {
       
+    }
+  },
+  computed: {
+    songsheetInfo: function () {
+      var songsheetInfo = null;
+      this.$store.state.recommendSongSheet.forEach((songsheet) => {
+        if (songsheet.id === parseInt(this.$route.params.id)) {
+          songsheetInfo = songsheet;
+        }
+      });
+      return songsheetInfo;
+    },
+    songsheetCoverReady: function () {
+      return this.songsheetCover !== '' ? this.songsheetCover : '/static/default-img.png';
     }
   },
   components: {
@@ -39,14 +55,15 @@ export default {
   color: #fff;
   /*background: rgba(0,0,0,0.3);*/
   overflow: hidden;
+  z-index: 1;
 }
 
-.header:before {
-  content: '';
+.header .blur-img {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   z-index: -2;
   background: url('http://p4.music.126.net/6grgnvPxRAbW4AFEr-TlGg==/19072128695547028.jpg?param=200y200') no-repeat;
+  background-repeat: no-repeat;
   background-size: 8.5rem 6rem;
   background-position: center top;
   filter: blur(0.15rem);

@@ -1,5 +1,6 @@
 <template>
   <div class="blur-bg">
+    <div class="blur-img" :style='{ "background-image": `url(${songsheetCoverReady})` }'></div>
     <div class="mask"></div>
   </div>
 </template>
@@ -7,9 +8,24 @@
 <script>
 export default {
   name: 'blur-bg',
+  props: [ 'songsheetCover' ],
   data () {
     return {
       
+    }
+  },
+  computed: {
+    songsheetInfo: function () {
+      var songsheetInfo = null;
+      this.$store.state.recommendSongSheet.forEach((songsheet) => {
+        if (songsheet.id === parseInt(this.$route.params.id)) {
+          songsheetInfo = songsheet;
+        }
+      });
+      return songsheetInfo;
+    },
+    songsheetCoverReady: function () {
+      return this.songsheetCover !== '' ? this.songsheetCover : '/static/default-img.png';
     }
   }
 }
@@ -26,12 +42,12 @@ export default {
   z-index: -1;
 }
 
-.blur-bg:before {
-  content: '';
+.blur-bg .blur-img {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   z-index: -2;
   background: url('http://p4.music.126.net/6grgnvPxRAbW4AFEr-TlGg==/19072128695547028.jpg?param=200y200') no-repeat;
+  background-repeat: no-repeat;
   background-size: 8.5rem 6rem;
   background-position: center top;
   filter: blur(0.15rem);

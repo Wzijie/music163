@@ -1,7 +1,8 @@
 <template>
   <div class="exclusive-broadcast">
     <h2 class="section-title">独家放送<i class="icon-arrow"></i></h2>
-    <ul class="broadcast-list section-list">
+    <p class="loading-text" v-if='loading'>正在加载...</p>
+    <ul class="broadcast-list section-list" v-else>
       <li v-for='(broadcast, index) in exclusiveBroadcastData' :class='{ "broadcast-banner": index === 2 }'>
         <a href="###">
           <div class="broadcast-cover">
@@ -26,6 +27,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  computed: {
+    loading: function () {
+      return this.exclusiveBroadcastData.length === 0;
     }
   }
 }

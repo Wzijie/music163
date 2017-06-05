@@ -35,7 +35,7 @@ export default {
   width: 100%;
   font-size: 0.2rem;
   color: #fff;
-  background: rgba(0,0,0,0.8);
+  background: #333;
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
 }
