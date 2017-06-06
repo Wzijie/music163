@@ -1,9 +1,7 @@
 <template>
   <div class="header">
-    <div class="blur-img" :style='{ "background-image": `url(${songsheetCoverReady})` }'></div>
-    <router-link to='/index/DiscoverMusic' class='goback'>
-      <i class="icon-goback"></i>
-    </router-link>
+    <div class="blur-img" :style='{ "background-image": `url(${songsheetCover})` }'></div>
+    <gobackLink></gobackLink>
     <h2 class="songsheet-title">歌单</h2>
     <div class="music-playing">
       <MusicPlayingLink></MusicPlayingLink>
@@ -14,6 +12,7 @@
 
 <script>
 import MusicPlayingLink from '@/components/MusicPlayingLink';
+import gobackLink from '@/components/gobackLink';
 export default {
   name: 'songsheet-header',
   props: [ 'songsheetCover' ],
@@ -22,22 +21,9 @@ export default {
       
     }
   },
-  computed: {
-    songsheetInfo: function () {
-      var songsheetInfo = null;
-      this.$store.state.recommendSongSheet.forEach((songsheet) => {
-        if (songsheet.id === parseInt(this.$route.params.id)) {
-          songsheetInfo = songsheet;
-        }
-      });
-      return songsheetInfo;
-    },
-    songsheetCoverReady: function () {
-      return this.songsheetCover !== '' ? this.songsheetCover : '/static/default-img.png';
-    }
-  },
   components: {
-    'MusicPlayingLink': MusicPlayingLink
+    'MusicPlayingLink': MusicPlayingLink,
+    'gobackLink': gobackLink
   }
 }
 </script>
@@ -68,20 +54,6 @@ export default {
   background-position: center top;
   filter: blur(0.15rem);
   margin: -0.3rem;
-}
-
-.header .goback {
-  display: block;
-  width: 0.95rem;
-  height: 0.44rem;
-}
-
-.header .goback .icon-goback {
-  display: inline-block;
-  width: 0.25rem;
-  height: 0.44rem;
-  background: url('../../../assets/images/goback.png') no-repeat;
-  background-size: cover;
 }
 
 .header .songsheet-title {

@@ -1,15 +1,15 @@
 <template>
   <div class="songsheet-info">
     <div class="songsheet-cover">
-      <img :src='songsheetInfo.picUrl' :alt='songsheetInfo.name'>
+      <img :src='songsheetCover' :alt='songsheetInfoLoading.name'>
       <p class="play-count">
         <i class="icon-headset"></i>
-        <span>{{ toTenThousandUnits(songsheetInfo.playCount) }}</span>
+        <span>{{ toTenThousandUnits(songsheetInfoLoading.playCount) }}</span>
       </p>
       <i class="icon-detail-info">i</i>
     </div>
     <div class="songsheet-title-author">
-      <h2 class="title">{{ songsheetInfo.name }}</h2>
+      <h2 class="title">{{ songsheetInfoLoading.name }}</h2>
       <div class="author">
         <div class="author-face">
           <img :src='songsheetInfoLoading.creator.avatarUrl' :alt='songsheetInfoLoading.creator.nickname'>
@@ -25,7 +25,7 @@
 <script>
 export default {
   name: 'songsheet-info',
-  props: [ 'songsheetData' ],
+  props: [ 'songsheetData', 'songsheetCover' ],
   data () {
     return {
       
@@ -45,15 +45,6 @@ export default {
           }
         }
       }
-    },
-    songsheetInfo: function () {
-      var songsheetInfo = null;
-      this.$store.state.recommendSongSheet.forEach((songsheet) => {
-        if (songsheet.id === parseInt(this.$route.params.id)) {
-          songsheetInfo = songsheet;
-        }
-      });
-      return songsheetInfo;
     }
   },
   methods: {

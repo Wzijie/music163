@@ -1,6 +1,6 @@
 <template>
   <div class="blur-bg">
-    <div class="blur-img" :style='{ "background-image": `url(${songsheetCoverReady})` }'></div>
+    <div class="blur-img" :style='{ "background-image": `url(${songsheetCover})` }'></div>
     <div class="mask"></div>
   </div>
 </template>
@@ -12,20 +12,6 @@ export default {
   data () {
     return {
       
-    }
-  },
-  computed: {
-    songsheetInfo: function () {
-      var songsheetInfo = null;
-      this.$store.state.recommendSongSheet.forEach((songsheet) => {
-        if (songsheet.id === parseInt(this.$route.params.id)) {
-          songsheetInfo = songsheet;
-        }
-      });
-      return songsheetInfo;
-    },
-    songsheetCoverReady: function () {
-      return this.songsheetCover !== '' ? this.songsheetCover : '/static/default-img.png';
     }
   }
 }

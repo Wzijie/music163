@@ -40,6 +40,12 @@ img {
   white-space: nowrap;
 }
 
+.translate-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .loading-text {
   font-size: 0.38rem;
   padding: 1rem 0;
@@ -106,6 +112,19 @@ img {
   height: 0.19rem;
   background: url('./assets/images/icon-headset.png') no-repeat;
   background-size: cover;
+}
+
+.icon-share {
+  display: inline-block;
+  width: 0.36rem;
+  height: 0.4rem;
+  background-image: url('./assets/images/icon-share.png');
+}
+
+.icon-download {
+  width: 0.42rem;
+  height: 0.36rem;
+  background-image: url('./assets/images/icon-download.png');
 }
 
 /*歌曲描述*/

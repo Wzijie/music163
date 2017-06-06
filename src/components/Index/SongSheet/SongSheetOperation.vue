@@ -93,18 +93,6 @@ export default {
   background-image: url('../../../assets/images/icon-comment.png');
 }
 
-.operation-list li a i.icon-share {
-  width: 0.36rem;
-  height: 0.4rem;
-  background-image: url('../../../assets/images/icon-share.png');
-}
-
-.operation-list li a i.icon-download {
-  width: 0.42rem;
-  height: 0.36rem;
-  background-image: url('../../../assets/images/icon-download.png');
-}
-
 .operation-list li a p {
   color: #ddd;
   font-size: 0.24rem;

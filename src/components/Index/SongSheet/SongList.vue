@@ -46,6 +46,9 @@ export default {
     }
   },
   methods: {
+    // singerArr: ['作者a','作者b','作者c']
+    // songName: 歌名
+    // 转换成： '作者a/作者b/作者c/ - 歌名'
     singerName: function (singerArr, songName) {
       var singerStr = '';
       if (singerArr.length === 1) {

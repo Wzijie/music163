@@ -2,7 +2,7 @@
   <div class="song-sheet">
     <BlurBg :songsheet-cover='songsheetCover'></BlurBg>
     <songsheetHeader :songsheet-cover='songsheetCover'></songsheetHeader>
-    <SongsheetInfo :songsheet-data='songsheetData'></SongsheetInfo>
+    <SongsheetInfo :songsheet-data='songsheetData'  :songsheet-cover='songsheetCover'></SongsheetInfo>
     <SongsheetOperation :songsheet-data='songsheetData'></SongsheetOperation>
     <SongList :songsheet-data='songsheetData'></SongList>
   </div>
@@ -21,7 +21,7 @@ export default {
   data () {
     return {
       songsheetData: {},
-      songsheetCover: ''
+      songsheetCover: '/static/default-img.png'
     }
   },
   components: {
@@ -32,6 +32,7 @@ export default {
     'SongList': SongList
   },
   computed: {
+    // 判断store是否已有歌单数据，如果已经有数据则直接使用
     songsheetDataReady: function () {
       var isReady = false;
       this.$store.state.recommendSongSheet.forEach((songsheet) => {
@@ -58,6 +59,7 @@ export default {
 
     ajaxRequest(songsheetURL, 'GET', songsheetSuccess, songsheetError);
 
+    // 如果store没有数据再请求歌单封面
     if (!this.songsheetDataReady) {
       // 歌单封面
       var songsheetCoverSuccess = (data) => {
