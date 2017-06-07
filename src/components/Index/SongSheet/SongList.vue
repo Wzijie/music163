@@ -18,9 +18,9 @@
       <li v-for='(song, index) in songsheetData.tracks'>
         <span class="song-order">{{ index + 1 }}</span>
         <div class="song-info">
-          <a href="###">
+          <a @click='toMusicPlayer(index)'>
             <p class="song-name text-overflow">{{ song.name }}</p>
-            <p class="song-author-info text-overflow">{{ singerName(song.ar, song.name) }}</p>
+            <p class="song-author-info text-overflow">{{ singerName(song.ar) }} - {{ song.al.name }}</p>
           </a>
           <span class="song-detail">
             <i class="icon-detail"></i>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import singerNameMerge from '@/plugs/singerNameMerge';
 export default {
   name: 'song-list',
   props: [ 'songsheetData' ],
@@ -47,18 +48,27 @@ export default {
   },
   methods: {
     // singerArr: ['作者a','作者b','作者c']
-    // songName: 歌名
-    // 转换成： '作者a/作者b/作者c/ - 歌名'
-    singerName: function (singerArr, songName) {
-      var singerStr = '';
-      if (singerArr.length === 1) {
-        return `${singerArr[0].name} - ${songName}`; 
-      } else {
-        singerArr.forEach((singer, index) => {
-          singerStr = singerStr + singer.name + ' / ';
-        });
-        return `${singerStr} - ${songName}`; 
-      } 
+    // 转换成： '作者a/作者b/作者c
+    singerName: function (singerArr) {
+      return singerNameMerge(singerArr);
+    },
+    // 跳转到音乐播放页
+    toMusicPlayer: function (songIndex) {
+      this.addCurrentSongList();
+      this.changeCurrentSongIndex(songIndex);
+      this.$router.push('/MusicPlayer');
+    },
+    // 添加歌曲列表
+    addCurrentSongList: function () {
+      this.$store.commit('currentPlaySong/addSongList', {
+        data: this.songsheetData.tracks
+      });
+    },
+    // 改变当前播放歌曲的索引
+    changeCurrentSongIndex: function (songIndex) {
+      this.$store.commit('currentPlaySong/changeSongIndex', {
+        data: songIndex
+      });
     }
   }
 }

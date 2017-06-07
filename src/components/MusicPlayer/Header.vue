@@ -2,8 +2,8 @@
   <div class="header">
     <gobackLink></gobackLink>
     <div class="song-info">
-      <p class="song-name text-overflow">歌名</p>
-      <p class="song-album text-overflow">abc</p>
+      <p class="song-name text-overflow">{{ currentSong.name }}</p>
+      <p class="song-album text-overflow">{{ singerName(currentSong.ar) }}</p>
     </div>
     <div class="song-share">
       <i class="icon-share"></i>
@@ -12,9 +12,13 @@
 </template>
 
 <script>
+import singerNameMerge from '@/plugs/singerNameMerge';
+
 import gobackLink from '@/components/gobackLink';
+
 export default {
   name: 'music-player-header',
+  props: [ 'currentSong' ],
   data () {
     return {
       
@@ -22,6 +26,11 @@ export default {
   },
   components: {
     'gobackLink': gobackLink
+  },
+  methods: {
+    singerName: function (singerArr) {
+      return singerNameMerge(singerArr);
+    }
   }
 }
 </script>

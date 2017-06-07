@@ -35,7 +35,7 @@ export default {
     // 判断store是否已有歌单数据，如果已经有数据则直接使用
     songsheetDataReady: function () {
       var isReady = false;
-      this.$store.state.recommendSongSheet.forEach((songsheet) => {
+      this.$store.state.songSheet.recommendSongSheet.forEach((songsheet) => {
         if (songsheet.id === parseInt(this.$route.params.id)) {
           this.songsheetCover = songsheet.picUrl;
           isReady = true;
@@ -49,7 +49,6 @@ export default {
     var songsheetSuccess = (data) => {
       console.log(data, '歌单数据');
       this.songsheetData = Object.assign({}, this.songsheetData, data.playlist);
-      console.log(this.songsheetData);
     }
     var songsheetError = (error) => {
       console.log(error);

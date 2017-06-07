@@ -1,12 +1,12 @@
 <template>
   <div class="audio-control">
     <div class="progress-info">
-      <span class="current-time audio-time">00:45</span>
-      <div class="progress">
+      <span class="current-time audio-time">{{ currentMinuteSecond }}</span>
+      <div class="progress" @touchstart='progressTouchstart' @touchmove='progressTouchmove' @touchend='progressTouchend'>
         <div class="progress-total progress-bar"></div>
-        <div class="progress-current progress-bar"></div>
+        <div class="progress-current progress-bar" :style='{ width: currentProgressWidth }'></div>
       </div>
-      <span class="total-time audio-time">05:45</span>
+      <span class="duration-time audio-time">{{ durationMinuteSecond }}</span>
     </div>
     <ul class="control">
       <li>
@@ -15,8 +15,8 @@
       <li>
         <i class="icon-prev"></i>
       </li>
-      <li class="play-control">
-        <i class="icon-play-02"></i>
+      <li class="play-control" @click='playStateChange'>
+        <i :class='iconPlayClass'></i>
       </li>
       <li>
         <i class="icon-prev icon-next"></i>
@@ -25,17 +25,121 @@
         <i class="icon-play-list"></i>
       </li>
     </ul> 
-    <audio src="http://m10.music.126.net/20170607113511/4012aed5b34b3c7f3a531544d6670eb3/ymusic/54ce/2312/0a69/d6ac8accf78f8deff0efbcb77afe75d3.mp3"></audio>
+    <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate'></audio>
   </div>
 </template>
 
 <script>
 export default {
   name: 'audio-control',
+  props: [ 'songUrl' ],
   data () {
     return {
-
+      // 播放状态
+      pause: null,
+      // 音频长度
+      durationTime: 0,
+      // 当前播放时间
+      currentTime: 0,
+      // audio元素
+      audio: null,
+      // 是否正在拖动进度条
+      progressTouching: null
     }
+  },
+  computed: {
+    // 根据播放状态返回图标class
+    iconPlayClass () {
+      return this.pause ? 'icon-play-02' : 'icon-pause';
+    },
+    // 返回转换后的音频长度
+    durationMinuteSecond () {
+      return this.computedMinuteSecond(this.durationTime);
+    },
+    // 返回转换后的音频当前播放时间
+    currentMinuteSecond () {
+      return this.computedMinuteSecond(this.currentTime);
+    },
+    // 返回进度条宽度
+    currentProgressWidth () {
+      var ratio = this.currentTime / this.durationTime;
+      return ratio * 100 + '%';
+    }
+  },
+  methods: {
+    // 音频可播放时执行
+    audioCanplay (event) {
+      console.dir(event.target);
+      // 开始播放并设置相应状态
+      this.audio = event.target;
+      this.durationTime = this.audio.duration;
+      this.audio.play();
+      this.pause = false;
+    },
+    // 秒 转换为 '分:秒'
+    // 100 ===> '01:40'
+    computedMinuteSecond (secondTime) {
+      if (secondTime === 0) {
+        return '00:00';
+      }
+      var minute = Math.floor(secondTime / 60);
+      var second = Math.floor(secondTime % 60);
+      minute = minute < 10 ? ('0' + minute) : minute;
+      second = second < 10 ? ('0' + second) : second;
+      return `${minute}:${second}`;
+    },
+    // 播放暂停切换
+    playStateChange () {
+      if (!this.audio) {
+        return;
+      }
+      if (this.audio.paused) {
+        this.audio.play();
+        this.pause = false;
+      } else {
+        this.audio.pause();
+        this.pause = true;
+      }
+    },
+
+    // 音频播放时持续执行
+    audioTimeupdate () {
+      // 如果正在拖动进度条则退出
+      if (this.progressTouching) {
+        return;
+      }
+      // 获取当前播放时间
+      this.currentTime = this.audio.currentTime;
+    },
+    // 改变当前播放时间
+    changeCurrentTime (time) {
+      this.audio.currentTime = time;
+    },
+    // 进度条touchstart时设置'正在拖动状态'
+    progressTouchstart (event) {
+      this.progressTouching = true;
+    },
+    // 拖动中设置播放时间状态
+    progressTouchmove (event) {
+      var progress = event.currentTarget;
+      var ratio = (event.touches[0].pageX - progress.offsetLeft) / progress.offsetWidth;
+      ratio = ratio >= 1 ? 1 : ratio;
+      ratio = ratio <= 0 ? 0 : ratio;
+      this.currentTime = ratio * this.durationTime;
+    },
+    // touchend时设置音频的当前播放时间
+    progressTouchend (event) {
+      var progress = event.currentTarget;
+      var ratio = (event.changedTouches[0].pageX - progress.offsetLeft) / progress.offsetWidth;
+      ratio = ratio >= 1 ? 1 : ratio;
+      ratio = ratio <= 0 ? 0 : ratio;
+      this.currentTime = ratio * this.durationTime;
+      this.changeCurrentTime(this.currentTime);
+      this.progressTouching = false;
+    }
+  },
+  mounted () {
+    console.log(this.$el);
   }
 }
 </script>
@@ -62,7 +166,7 @@ export default {
   color: rgba(255,255,255,0.7);
 }
 
-.progress-info .total-time {
+.progress-info .duration-time {
   color: rgba(255,255,255,0.5);
 }
 

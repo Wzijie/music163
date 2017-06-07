@@ -2,7 +2,7 @@
   <div class="song-cover-box">
     <div class="song-cover">
       <div class="disc-bg translate-center"></div>
-      <img class="cover translate-center" src="http://p4.music.126.net/xKDBkJJm78xWnHBEQcKxcQ==/109951162935702655.jpg?param=200y200" alt="1">
+      <img class="cover translate-center" :src='songAlbumCover' alt="cover">
     </div>
   </div>    
 </template>
@@ -10,6 +10,7 @@
 <script>
 export default {
   name: 'song-cover-box',
+  props: [ 'songAlbumCover' ],
   data () {
     return {
       

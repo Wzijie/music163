@@ -70,8 +70,9 @@ export default {
     var recommendSongSheetSuccess = (data) => {
       console.log(data, '推荐歌单数据');
       this.recommendSongSheetData.push(...data.result.slice(0, 6));
-      this.$store.commit('loadRecommendSongSheet', {
-        recommendSongSheetList: data.result.slice(0, 6)
+      console.log(this.$store.state);
+      this.$store.commit('songSheet/addRecommendSongSheet', {
+        data: data.result.slice(0, 6)
       });
     }
     var recommendSongSheetError = (error) => {
