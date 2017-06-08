@@ -101,7 +101,7 @@ img {
 }
 
 .play-count span {
-    margin-right: 0.2rem;
+  margin-right: 0.2rem;
 }
 /*封面顶部的播放次数 end*/
 
@@ -125,6 +125,13 @@ img {
   width: 0.42rem;
   height: 0.36rem;
   background-image: url('./assets/images/icon-download.png');
+}
+
+.icon-loop-list {
+  width: 0.48rem;
+  height: 0.33rem;
+  background: url('./assets/images/icon-loop-list.png') no-repeat;
+  background-size: cover;
 }
 
 /*歌曲描述*/

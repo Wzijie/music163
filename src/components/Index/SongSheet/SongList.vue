@@ -60,13 +60,13 @@ export default {
     },
     // 添加歌曲列表
     addCurrentSongList: function () {
-      this.$store.commit('currentPlaySong/addSongList', {
+      this.$store.commit('MusicPlayer/addSongList', {
         data: this.songsheetData.tracks
       });
     },
     // 改变当前播放歌曲的索引
     changeCurrentSongIndex: function (songIndex) {
-      this.$store.commit('currentPlaySong/changeSongIndex', {
+      this.$store.commit('MusicPlayer/changeSongIndex', {
         data: songIndex
       });
     }

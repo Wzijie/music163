@@ -1,9 +1,12 @@
 <template>
   <div class="audio-control">
+    <p class="loading-text" v-if='songUrl === ""'>正在加载...</p>
+    <template else>
     <div class="progress-info">
       <span class="current-time audio-time">{{ currentMinuteSecond }}</span>
       <div class="progress" @touchstart='progressTouchstart' @touchmove='progressTouchmove' @touchend='progressTouchend'>
         <div class="progress-total progress-bar"></div>
+        <div class="progress-buffer progress-bar" :style='{ width: bufferedProgressWidth }'></div>
         <div class="progress-current progress-bar" :style='{ width: currentProgressWidth }'></div>
       </div>
       <span class="duration-time audio-time">{{ durationMinuteSecond }}</span>
@@ -12,31 +15,36 @@
       <li>
         <i class="icon-loop-list"></i>
       </li>
-      <li>
+      <li @click='changeSongIndex(songIndex - 1)'>
         <i class="icon-prev"></i>
       </li>
       <li class="play-control" @click='playStateChange'>
         <i :class='iconPlayClass'></i>
       </li>
-      <li>
+      <li @click='changeSongIndex(songIndex + 1)'>
         <i class="icon-prev icon-next"></i>
       </li>
       <li>
         <i class="icon-play-list"></i>
       </li>
     </ul> 
-    <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate'></audio>
+    <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate' @progress='changeProgressBuffer' @waiting='waitingBuffering'></audio>
+    </template>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+import ajaxRequest from '@/plugs/ajaxRequest';
 export default {
   name: 'audio-control',
-  props: [ 'songUrl' ],
+  props: [ 'songList', 'songIndex' ],
   data () {
     return {
       // 播放状态
-      pause: null,
+      // pause: null,
+      songUrl: '',
       // 音频长度
       durationTime: 0,
       // 当前播放时间
@@ -44,7 +52,10 @@ export default {
       // audio元素
       audio: null,
       // 是否正在拖动进度条
-      progressTouching: null
+      progressTouching: null,
+      // 最后一个缓冲范围的结束位置时间
+      lastBufferLength: 0,
+      isWaiting: null
     }
   },
   computed: {
@@ -60,21 +71,54 @@ export default {
     currentMinuteSecond () {
       return this.computedMinuteSecond(this.currentTime);
     },
-    // 返回进度条宽度
+    // 返回播放进度条宽度
     currentProgressWidth () {
       var ratio = this.currentTime / this.durationTime;
       return ratio * 100 + '%';
-    }
+    },
+    // 缓冲进度条宽度
+    bufferedProgressWidth () {
+      var ratio = this.lastBufferLength / this.durationTime;
+      return ratio * 100 + '%';
+    },
+    ...mapState({
+      pause (state) {
+        return state.MusicPlayer.pause;
+      },
+      volume (state) {
+        return state.MusicPlayer.volume;
+      },
+      muted (state) {
+        return state.MusicPlayer.muted;
+      }
+    })
   },
   methods: {
+     // 获取歌曲资源url
+    getSongURL (songId) {
+      var getSongSuccess = (data) => {
+        console.log(data, '获取歌曲资源url');
+        this.songUrl = data.data[0].url;
+      }
+      var getSongError = (error) => {
+        console.log(error);
+      }
+      var getSongRequestURL = `http://localhost:3000/music/url?id=${songId}`;
+      ajaxRequest(getSongRequestURL, 'GET', getSongSuccess, getSongError);
+    },
+
     // 音频可播放时执行
     audioCanplay (event) {
-      console.dir(event.target);
+      console.dir(event.target, 'Canplay');
       // 开始播放并设置相应状态
       this.audio = event.target;
       this.durationTime = this.audio.duration;
       this.audio.play();
-      this.pause = false;
+      this.isWaiting = false;
+      // this.pause = false;
+      this.$store.commit('MusicPlayer/changePlayState', {
+        data: false
+      });
     },
     // 秒 转换为 '分:秒'
     // 100 ===> '01:40'
@@ -90,27 +134,39 @@ export default {
     },
     // 播放暂停切换
     playStateChange () {
-      if (!this.audio) {
+      console.log(this.pause);
+      if (!this.audio || this.waiting) {
         return;
       }
       if (this.audio.paused) {
         this.audio.play();
-        this.pause = false;
+        // this.pause = false;
+        this.$store.commit('MusicPlayer/changePlayState', {
+          data: false
+        });
       } else {
         this.audio.pause();
-        this.pause = true;
+        // this.pause = true;
+        this.$store.commit('MusicPlayer/changePlayState', {
+          data: true
+        });
       }
     },
 
     // 音频播放时持续执行
     audioTimeupdate () {
       // 如果正在拖动进度条则退出
-      if (this.progressTouching) {
+      if (this.progressTouching || this.audio === null) {
         return;
       }
       // 获取当前播放时间
       this.currentTime = this.audio.currentTime;
+
+      // 设置音量
+      this.audio.volume = this.volume;
+      this.audio.muted = this.muted;
     },
+    
     // 改变当前播放时间
     changeCurrentTime (time) {
       this.audio.currentTime = time;
@@ -136,10 +192,47 @@ export default {
       this.currentTime = ratio * this.durationTime;
       this.changeCurrentTime(this.currentTime);
       this.progressTouching = false;
+    },
+    // 设置最后一个缓冲范围的结束位置
+    changeProgressBuffer (event) {
+      if (event.target.buffered.length === 0) {
+        return;
+      }
+      console.log(event.target.buffered.start(0), event.target.buffered.end(0));
+      var buffered = event.target.buffered;
+      this.lastBufferLength = buffered.end(buffered.length - 1);
+    },
+
+    // 因缓冲而暂停时改变播放状态
+    waitingBuffering (event) {
+      console.log('waiting');
+      this.isWaiting = true;
+      this.$store.commit('MusicPlayer/changePlayState', {
+        data: true
+      });
+    },
+
+    // 改变当前歌曲索引
+    changeSongIndex (songIndex) {
+      if (songIndex >= this.songList.length || songIndex < 0) {
+        return;
+      }
+      this.songUrl = '';
+      this.getSongURL(this.songList[songIndex].id);
+      this.$store.commit('MusicPlayer/changePlayState', {
+        data: true
+      });
+      this.$store.commit('MusicPlayer/changeSongIndex', {
+        data: songIndex
+      });
     }
   },
+  updated () {
+
+  },
   mounted () {
-    console.log(this.$el);
+    console.log('mounted');
+    this.getSongURL(this.songList[this.songIndex].id);
   }
 }
 </script>
@@ -156,6 +249,7 @@ export default {
   height: 1.1rem;
   padding: 0.39rem 0.2rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .progress-info .audio-time {
@@ -185,12 +279,17 @@ export default {
 
 .progress-info .progress .progress-total {
   width: 100%;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.2);
 }
 
 .progress-info .progress .progress-current {
   width: 0%;
   background: #cc3333;
+}
+
+.progress-info .progress .progress-buffer {
+  width: 0%;
+  background: rgba(255,255,255,0.5);
 }
 
 .progress-info .progress .progress-current:before {
@@ -231,13 +330,6 @@ export default {
 
 .control li i {
   display: inline-block;
-}
-
-.control li i.icon-loop-list {
-  width: 0.48rem;
-  height: 0.33rem;
-  background: url('../../assets/images/icon-loop-list.png') no-repeat;
-  background-size: cover;
 }
 
 .control li i.icon-loop-song {
@@ -285,5 +377,10 @@ export default {
   height: 0.48rem;
   background: url('../../assets/images/icon-play-list.png') no-repeat;
   background-size: cover;
+}
+
+.loading-text {
+  color: rgba(255,255,255, 0.7);
+  background: transparent;
 }
 </style>

@@ -2,43 +2,46 @@
   <div class="music-player">
     <div class="blur-img" :style='{ "background-image": `url(${songAlbumCover})` }'></div>
     <musicPlayerHeader :current-song='currentSong'></musicPlayerHeader>
+    <VolumeControl></VolumeControl>
     <SongCover :song-album-cover='songAlbumCover'></SongCover>
     <SongOperation></SongOperation>
-    <AudioControl :song-url='songUrl'></AudioControl>
+    <AudioControl :song-list='songList' :song-index='songIndex'></AudioControl>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
-import ajaxRequest from '@/plugs/ajaxRequest';
+// import ajaxRequest from '@/plugs/ajaxRequest';
 
 import Header from './Header';
 import SongCover from './SongCover';
 import SongOperation from './SongOperation';
 import AudioControl from './AudioControl';
+import VolumeControl from './VolumeControl';
 export default {
   name: 'music-player',
   data () {
     return {
-      songUrl: ''
+
     }
   },
   components: {
     'musicPlayerHeader': Header,
     'SongCover': SongCover,
     'SongOperation': SongOperation,
-    'AudioControl': AudioControl
+    'AudioControl': AudioControl,
+    'VolumeControl': VolumeControl
   },
   computed: {
     ...mapState({
       // 歌曲列表
       songList (state) {
-        return state.currentPlaySong.songList;
+        return state.MusicPlayer.songList;
       },
       // 歌曲索引
       songIndex (state) {
-        return state.currentPlaySong.songIndex;
+        return state.MusicPlayer.songIndex;
       }
     }),
     // 当前歌曲
@@ -52,21 +55,25 @@ export default {
   },
   methods: {
     // 获取歌曲资源url
-    getSongURL (songId) {
-      var getSongSuccess = (data) => {
-        console.log(data);
-        this.songUrl = data.data[0].url;
-      }
-      var getSongError = (error) => {
-        console.log(error);
-      }
-      var getSongRequestURL = `http://localhost:3000/music/url?id=${songId}`;
-      ajaxRequest(getSongRequestURL, 'GET', getSongSuccess, getSongError);
-    }
+    // getSongURL (songId) {
+    //   var getSongSuccess = (data) => {
+    //     console.log(data, '获取歌曲资源url');
+    //     this.songUrl = data.data[0].url;
+    //   }
+    //   var getSongError = (error) => {
+    //     console.log(error);
+    //   }
+    //   var getSongRequestURL = `http://localhost:3000/music/url?id=${songId}`;
+    //   ajaxRequest(getSongRequestURL, 'GET', getSongSuccess, getSongError);
+    // }
   },
+  // updated () {
+  //   console.log(this.currentSong, 'updated');
+  //   this.getSongURL(this.currentSong.id);
+  // },
   mounted () {
-    console.log(this.currentSong);
-    this.getSongURL(this.currentSong.id);
+    // console.log(this.currentSong);
+    // this.getSongURL(this.currentSong.id);
   }
 }
 </script>
