@@ -240,6 +240,7 @@ export default {
 <style scoped>
 .audio-control {
   height: 2.43rem;
+  min-height: 2.43rem;
 }
 
 .progress-info {

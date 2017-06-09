@@ -34,12 +34,14 @@ export default {
 .song-operation {
   display: flex;
   justify-content: center;
+  height: 0.63rem;
+  min-height: 0.63rem;
 }
 
 .song-operation ul {
   display: flex;
   width: 6.08rem;
-  height: 0.63rem;
+  height: 100%;
 }
 
 .song-operation ul li {

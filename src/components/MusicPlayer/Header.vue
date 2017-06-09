@@ -42,7 +42,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 0.88rem;
-  border-bottom: 0.01rem solid #333;
+  min-height: 0.88rem;
+  border-bottom: 0.01rem solid rgba(255,255,255,0.3);
   color: #fff;
 }
 
