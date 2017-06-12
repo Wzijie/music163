@@ -52,6 +52,12 @@ img {
   background: #fff;
 }
 
+.icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 /*发现音乐组件的各板块列表 start*/
 .section-list {
   display: flex;

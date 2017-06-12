@@ -19,7 +19,7 @@
         <span class="song-order">{{ index + 1 }}</span>
         <div class="song-info">
           <a @click='toMusicPlayer(index)'>
-            <p class="song-name text-overflow">{{ song.name }}</p>
+            <p class="song-name text-overflow">{{ song.name }} <span class="song-come-from" v-if='songComeFrom(song.alia, song.tns)'>({{ songComeFrom(song.alia, song.tns) }})</span></p>
             <p class="song-author-info text-overflow">{{ singerName(song.ar) }} - {{ song.al.name }}</p>
           </a>
           <span class="song-detail">
@@ -51,6 +51,16 @@ export default {
     // 转换成： '作者a/作者b/作者c
     singerName: function (singerArr) {
       return singerNameMerge(singerArr);
+    },
+    // 歌曲出处, 值存放在song.alia或者song.tns中, 都是数组
+    songComeFrom: function (comeFromAlia, comeFromTns) {
+      if (comeFromTns !== undefined) {
+        return comeFromTns[0];
+      } else if (comeFromAlia && comeFromAlia[0]) {
+        return comeFromAlia[0];
+      } else {
+        return false;
+      }
     },
     // 跳转到音乐播放页
     toMusicPlayer: function (songIndex) {
@@ -129,6 +139,10 @@ export default {
 .song-list ul li .song-info a .song-name {
   font-size: 0.3rem;
   margin: 0.08rem 0;
+}
+
+.song-list ul li .song-info a .song-name .song-come-from {
+  color: #999;
 }
 
 .song-list ul li .song-info a .song-author-info {

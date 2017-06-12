@@ -6,6 +6,8 @@
     <SongCover :song-album-cover='songAlbumCover'></SongCover>
     <SongOperation></SongOperation>
     <AudioControl :song-list='songList' :song-index='songIndex'></AudioControl>
+    <SongPlayList></SongPlayList>
+    <BlackMask></BlackMask>
   </div>
 </template>
 
@@ -19,6 +21,9 @@ import SongCover from './SongCover';
 import SongOperation from './SongOperation';
 import AudioControl from './AudioControl';
 import VolumeControl from './VolumeControl';
+import SongPlayList from './SongPlayList';
+import Mask from './Mask';
+
 export default {
   name: 'music-player',
   data () {
@@ -31,7 +36,9 @@ export default {
     'SongCover': SongCover,
     'SongOperation': SongOperation,
     'AudioControl': AudioControl,
-    'VolumeControl': VolumeControl
+    'VolumeControl': VolumeControl,
+    'SongPlayList': SongPlayList,
+    'BlackMask': Mask
   },
   computed: {
     ...mapState({

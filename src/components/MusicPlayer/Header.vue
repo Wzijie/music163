@@ -49,7 +49,7 @@ export default {
 
 .header .song-info {
   display: flex;
-  align-items: center;
+  align-content: center;
   flex-wrap: wrap;
   width: 5rem;
   height: 100%;

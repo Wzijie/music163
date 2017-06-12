@@ -2,33 +2,33 @@
   <div class="audio-control">
     <p class="loading-text" v-if='songUrl === ""'>正在加载...</p>
     <template else>
-    <div class="progress-info">
-      <span class="current-time audio-time">{{ currentMinuteSecond }}</span>
-      <div class="progress" @touchstart='progressTouchstart' @touchmove='progressTouchmove' @touchend='progressTouchend'>
-        <div class="progress-total progress-bar"></div>
-        <div class="progress-buffer progress-bar" :style='{ width: bufferedProgressWidth }'></div>
-        <div class="progress-current progress-bar" :style='{ width: currentProgressWidth }'></div>
+      <div class="progress-info">
+        <span class="current-time audio-time">{{ currentMinuteSecond }}</span>
+        <div class="progress" @touchstart='progressTouchstart' @touchmove='progressTouchmove' @touchend='progressTouchend'>
+          <div class="progress-total progress-bar"></div>
+          <div class="progress-buffer progress-bar" :style='{ width: bufferedProgressWidth }'></div>
+          <div class="progress-current progress-bar" :style='{ width: currentProgressWidth }'></div>
+        </div>
+        <span class="duration-time audio-time">{{ durationMinuteSecond }}</span>
       </div>
-      <span class="duration-time audio-time">{{ durationMinuteSecond }}</span>
-    </div>
-    <ul class="control">
-      <li>
-        <i class="icon-loop-list"></i>
-      </li>
-      <li @click='changeSongIndex(songIndex - 1)'>
-        <i class="icon-prev"></i>
-      </li>
-      <li class="play-control" @click='playStateChange'>
-        <i :class='iconPlayClass'></i>
-      </li>
-      <li @click='changeSongIndex(songIndex + 1)'>
-        <i class="icon-prev icon-next"></i>
-      </li>
-      <li>
-        <i class="icon-play-list"></i>
-      </li>
-    </ul> 
-    <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate' @progress='changeProgressBuffer' @waiting='waitingBuffering'></audio>
+      <ul class="control">
+        <li>
+          <i class="icon-loop-list"></i>
+        </li>
+        <li @click='changeSongIndex(songIndex - 1)'>
+          <i class="icon-prev"></i>
+        </li>
+        <li class="play-control" @click='playStateChange'>
+          <i :class='iconPlayClass'></i>
+        </li>
+        <li @click='changeSongIndex(songIndex + 1)'>
+          <i class="icon-prev icon-next"></i>
+        </li>
+        <li @click='isSongPlayListShowChange'>
+          <i class="icon-play-list"></i>
+        </li>
+      </ul> 
+      <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate' @progress='changeProgressBuffer' @waiting='waitingBuffering' @ended='audioEnded'></audio>
     </template>
   </div>
 </template>
@@ -55,7 +55,9 @@ export default {
       progressTouching: null,
       // 最后一个缓冲范围的结束位置时间
       lastBufferLength: 0,
-      isWaiting: null
+      // 是否因缓冲而暂停
+      isWaiting: null,
+      playMode: 'listLoop'
     }
   },
   computed: {
@@ -92,6 +94,18 @@ export default {
         return state.MusicPlayer.muted;
       }
     })
+  },
+  watch: {
+    songIndex () {
+      this.songUrl = '';
+      this.getSongURL(this.songList[this.songIndex].id);
+    },
+    volume () {
+      this.audio.volume = this.volume;
+    },
+    muted () {
+      this.audio.muted = this.muted;
+    }
   },
   methods: {
      // 获取歌曲资源url
@@ -161,10 +175,6 @@ export default {
       }
       // 获取当前播放时间
       this.currentTime = this.audio.currentTime;
-
-      // 设置音量
-      this.audio.volume = this.volume;
-      this.audio.muted = this.muted;
     },
     
     // 改变当前播放时间
@@ -198,7 +208,6 @@ export default {
       if (event.target.buffered.length === 0) {
         return;
       }
-      console.log(event.target.buffered.start(0), event.target.buffered.end(0));
       var buffered = event.target.buffered;
       this.lastBufferLength = buffered.end(buffered.length - 1);
     },
@@ -212,19 +221,47 @@ export default {
       });
     },
 
+    playModeHandler () {
+      var songIndex = null;
+      switch (this.playMode) {
+        case 'listLoop':
+          songIndex = this.songIndex + 1 >= this.songList.length ? 0 : this.songIndex + 1;
+          this.changeSongIndex(songIndex);
+          break;
+        case 'oneSongLoop':
+          this.audio.currentTime = 0;
+          break;
+        case 'randomPlay':
+          songIndex = Math.floor(Math.random() * this.songList.length);
+          this.changeSongIndex(songIndex);
+          break;
+        default: break;
+      }
+    },
+
+    audioEnded (event) {
+      console.log('audioEnded');
+      this.playModeHandler();
+    },
+
     // 改变当前歌曲索引
     changeSongIndex (songIndex) {
       if (songIndex >= this.songList.length || songIndex < 0) {
         return;
       }
-      this.songUrl = '';
-      this.getSongURL(this.songList[songIndex].id);
-      this.$store.commit('MusicPlayer/changePlayState', {
-        data: true
-      });
+      // this.songUrl = '';
+      // this.getSongURL(this.songList[songIndex].id);
+      // this.$store.commit('MusicPlayer/changePlayState', {
+      //   data: true
+      // });
       this.$store.commit('MusicPlayer/changeSongIndex', {
         data: songIndex
       });
+    },
+
+    // 改变是否显示音乐播放列表组件
+    isSongPlayListShowChange () {
+      this.$store.commit('MusicPlayer/isSongPlayListShowChange');
     }
   },
   updated () {
