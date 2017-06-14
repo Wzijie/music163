@@ -11,6 +11,7 @@
     <FeaturedColumn :featured-column-data='featuredColumnData'></FeaturedColumn>
     <AnchorStation :anchor-station-data='anchorStationData'></AnchorStation>
     <SearchMessage></SearchMessage>
+    <SearchResult></SearchResult>
   </div>
 </template>
 
@@ -27,6 +28,7 @@ import RecommendMV from './RecommendMV';
 import FeaturedColumn from './FeaturedColumn';
 import AnchorStation from './AnchorStation';
 import SearchMessage from './SearchMessage';
+import SearchResult from './SearchResult';
 
 import ajaxRequest from '@/plugs/ajaxRequest.js';
 
@@ -54,7 +56,8 @@ export default {
     'RecommendMV': RecommendMV,
     'FeaturedColumn': FeaturedColumn,
     'AnchorStation': AnchorStation,
-    'SearchMessage': SearchMessage
+    'SearchMessage': SearchMessage,
+    'SearchResult': SearchResult
   },
   mounted () {
     // 焦点图数据

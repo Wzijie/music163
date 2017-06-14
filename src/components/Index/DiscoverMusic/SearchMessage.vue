@@ -38,11 +38,11 @@
       </ul>
     </template>
     <div class="search-suggest" v-else>
-      <a class="direct-search text-overflow">搜索 “{{ keyword }}”</a>
+      <a class="direct-search text-overflow">搜索 “ {{ keyword }} ”</a>
       <ul class="suggest-list">
-        <li>
+        <li v-for='suggest in suggestList'>
           <i class="icon icon-search_02"></i>
-          <a class="text-overflow">搜索建议</a>
+          <a class="text-overflow">{{ suggest.name }}</a>
         </li>
       </ul>
     </div>
@@ -52,11 +52,12 @@
 
 <script>
 import { mapState } from 'vuex';
+import ajaxRequest from '@/plugs/ajaxRequest';
 export default {
   name: 'search-message',
   data () {
     return {
-
+      suggestList: []
     }
   },
   computed: {
@@ -71,6 +72,35 @@ export default {
     isKeywordEmpty () {
       return this.keyword === '';
     }
+  },
+  watch: {
+    keyword () {
+      if (this.keyword === '') {
+        return;
+      }
+      this.suggestList.splice(0, this.suggestList.length);
+      this.getSuggestList();
+    }
+  },
+  methods: {
+    getSuggestList () {
+      var suggestSuccess = (data) => {
+        console.log(data, '搜索建议');
+        var tmparr = [];
+        Object.keys(data.result).forEach((objkey) => {
+          if (objkey === 'order') {
+            return;
+          }
+          tmparr.push(...data.result[objkey]);
+        });
+        this.suggestList.push(...tmparr);
+      }
+      var suggestError = (error) => {
+        console.log(error);
+      }
+      var suggestURL = `http://localhost:3000/search/suggest?keywords=${this.keyword}`;
+      ajaxRequest(suggestURL, 'GET', suggestSuccess, suggestError);
+    }
   }
 }
 </script>
@@ -81,7 +111,7 @@ export default {
   top: 0; left: 0; bottom: 0; right: 0;
   margin-top: 0.88rem;
   background: #fff;
-  z-index: 999;
+  z-index: 998;
 }
 
 .singer-category {
@@ -163,21 +193,26 @@ export default {
 }
 
 .search-suggest {
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .search-suggest .direct-search {
   display: block;
   height: 0.88rem;
+  min-height: 0.88rem;
   line-height: 0.88rem;
   margin-left: 0.2rem;
   border-bottom: 0.01rem solid #ccc;
-  color: #2ca8e2;
+  color: #5883b2;
   text-align: left;
 }
 
 .suggest-list {
-
+  height: 100%;
+  overflow-y: scroll;
+  padding-bottom: 1rem;
 }
 
 .suggest-list li {

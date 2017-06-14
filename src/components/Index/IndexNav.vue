@@ -36,6 +36,7 @@ export default {
   font-size: 0.2rem;
   color: #fff;
   background: #333;
+  z-index: 9999;
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
 }
