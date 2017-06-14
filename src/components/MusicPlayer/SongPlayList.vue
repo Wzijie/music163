@@ -2,9 +2,9 @@
 <transition name="fade">
   <div class="song-play-list" v-show='isSongPlayListShow'>
     <div class="control">
-      <div class="play-mode operation-btn">
-        <i class="icon icon-loop-list"></i>
-        <span>列表循环</span>
+      <div class="play-mode operation-btn" @click='changePlayMode'>
+        <i class="icon" :class='playModeIconClass'></i>
+        <span>{{ playModeTipText }}</span>
       </div>
       <div class="collection-clear-box">
         <div class="song-collection operation-btn">
@@ -23,7 +23,7 @@
         <a @click='changeSongIndex(index)'>
           <p class="text-overflow" :class='{ "active-song": songActive(index) }'>{{ song.name }}<span v-if='songComeFrom(song.alia, song.tns)'> - {{ songComeFrom(song.alia, song.tns) }}</span></p>
         </a>
-        <div class="song-delete">
+        <div class="song-delete" @click='deleteSong(index)'>
           <i class="icon icon-delete translate-center"></i>
         </div>
       </li>
@@ -51,8 +51,21 @@ export default {
       },
       isSongPlayListShow (state) {
         return state.MusicPlayer.isSongPlayListShow;
+      },
+      playMode (state) {
+        return state.MusicPlayer.playMode;
       }
-    })
+    }),
+    // 返回播放模式图标的class
+    playModeIconClass () {
+      return this.playModeSwitch('icon-loop-list_02', 'icon-loop-song_02', 'icon-random-play_02');
+    },
+
+    // 播放模式提示文字
+    playModeTipText () {
+      var songListLength = this.songList.length
+      return this.playModeSwitch(`列表循环(${songListLength})`, '单曲循环', `随机播放(${songListLength})`);
+    }
   },
   methods: {
     // 歌曲出处, 值存放在song.alia或者song.tns中, 都是数组
@@ -74,16 +87,53 @@ export default {
 
     songActive (index) {
       return this.songIndex === index;
+    },
+
+    // 根据播放模式返回不同的内容
+    // 3个参数分别是返回的内容
+    playModeSwitch (listLoopReturn, songLoopReturn, randomPlayReturn) {
+      switch (this.playMode) {
+        case 'listLoop':
+          return listLoopReturn;
+        case 'oneSongLoop':
+          return songLoopReturn;
+        case 'randomPlay':
+          return randomPlayReturn;
+        default: break;
+      }
+    },
+
+    // 改变播放模式
+    changePlayMode () {
+      this.$store.commit('MusicPlayer/changePlayMode');
+    },
+
+    deleteSong (songIndex) {
+      this.$store.commit('MusicPlayer/deleteSong', {
+        data: songIndex
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-.icon-loop-list {
+.icon-loop-list_02 {
   width: 0.43rem;
   height: 0.3rem;
   background-image: url('../../assets/images/icon-loop-list_02.png');
+}
+
+.icon-loop-song_02 {
+  width: 0.48rem;
+  height: 0.48rem;
+  background-image: url('../../assets/images/icon-loop-song_02.png');
+}
+
+.icon-random-play_02 {
+  width: 0.48rem;
+  height: 0.48rem;
+  background-image: url('../../assets/images/icon-random-play_02.png');
 }
 
 .icon-collection_02 {
@@ -96,12 +146,6 @@ export default {
   width: 0.34rem;
   height: 0.34rem;
   background-image: url('../../assets/images/icon-trash.png');
-}
-
-.icon-delete {
-  width: 0.48rem;
-  height: 0.48rem;
-  background-image: url('../../assets/images/icon-delete.png');
 }
 
 .icon-volume_02 {

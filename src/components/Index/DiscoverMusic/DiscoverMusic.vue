@@ -10,21 +10,23 @@
     <RecommendMV :recommend-mv-data='recommendMvData'></RecommendMV>
     <FeaturedColumn :featured-column-data='featuredColumnData'></FeaturedColumn>
     <AnchorStation :anchor-station-data='anchorStationData'></AnchorStation>
+    <SearchMessage></SearchMessage>
   </div>
 </template>
 
 <script>
 
-import IndexHeader from '@/components/Index/DiscoverMusic/IndexHeader';
-import Nav from '@/components/Index/DiscoverMusic/Nav';
-import Banner from '@/components/Index/DiscoverMusic/Banner';
-import SubMenu from '@/components/Index/DiscoverMusic/SubMenu';
-import RecommendSongSheet from '@/components/Index/DiscoverMusic/RecommendSongSheet';
-import ExclusiveBroadcast from '@/components/Index/DiscoverMusic/ExclusiveBroadcast';
-import NewestMusic from '@/components/Index/DiscoverMusic/NewestMusic';
-import RecommendMV from '@/components/Index/DiscoverMusic/RecommendMV';
-import FeaturedColumn from '@/components/Index/DiscoverMusic/FeaturedColumn';
-import AnchorStation from '@/components/Index/DiscoverMusic/AnchorStation';
+import IndexHeader from './IndexHeader';
+import Nav from './Nav';
+import Banner from './Banner';
+import SubMenu from './SubMenu';
+import RecommendSongSheet from './RecommendSongSheet';
+import ExclusiveBroadcast from './ExclusiveBroadcast';
+import NewestMusic from './NewestMusic';
+import RecommendMV from './RecommendMV';
+import FeaturedColumn from './FeaturedColumn';
+import AnchorStation from './AnchorStation';
+import SearchMessage from './SearchMessage';
 
 import ajaxRequest from '@/plugs/ajaxRequest.js';
 
@@ -51,7 +53,8 @@ export default {
     'NewestMusic': NewestMusic,
     'RecommendMV': RecommendMV,
     'FeaturedColumn': FeaturedColumn,
-    'AnchorStation': AnchorStation
+    'AnchorStation': AnchorStation,
+    'SearchMessage': SearchMessage
   },
   mounted () {
     // 焦点图数据

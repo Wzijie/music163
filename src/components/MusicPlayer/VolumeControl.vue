@@ -76,6 +76,7 @@ export default {
   height: 0.32rem;
   position: absolute;
   top: 1rem;
+  z-index: 2;
 }
 
 .set-volume-mute {

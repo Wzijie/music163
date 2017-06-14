@@ -12,8 +12,8 @@
         <span class="duration-time audio-time">{{ durationMinuteSecond }}</span>
       </div>
       <ul class="control">
-        <li>
-          <i class="icon-loop-list"></i>
+        <li @click='changePlayMode'>
+          <i :class="playModeIconClass"></i>
         </li>
         <li @click='changeSongIndex(songIndex - 1)'>
           <i class="icon-prev"></i>
@@ -56,8 +56,7 @@ export default {
       // 最后一个缓冲范围的结束位置时间
       lastBufferLength: 0,
       // 是否因缓冲而暂停
-      isWaiting: null,
-      playMode: 'listLoop'
+      isWaiting: null
     }
   },
   computed: {
@@ -92,8 +91,15 @@ export default {
       },
       muted (state) {
         return state.MusicPlayer.muted;
+      },
+      playMode (state) {
+        return state.MusicPlayer.playMode;
       }
-    })
+    }),
+    // 返回播放模式图标的class
+    playModeIconClass () {
+      return this.playModeSwitch('icon-loop-list', 'icon-loop-song', 'icon-random-play');
+    }
   },
   watch: {
     songIndex () {
@@ -262,7 +268,27 @@ export default {
     // 改变是否显示音乐播放列表组件
     isSongPlayListShowChange () {
       this.$store.commit('MusicPlayer/isSongPlayListShowChange');
+    },
+
+    // 改变播放模式
+    changePlayMode () {
+      this.$store.commit('MusicPlayer/changePlayMode');
+    },
+
+    // 根据播放模式返回不同的内容
+    // 3个参数分别是返回的内容
+    playModeSwitch (listLoopReturn, songLoopReturn, randomPlayReturn) {
+      switch (this.playMode) {
+        case 'listLoop':
+          return listLoopReturn;
+        case 'oneSongLoop':
+          return songLoopReturn;
+        case 'randomPlay':
+          return randomPlayReturn;
+        default: break;
+      }
     }
+
   },
   updated () {
 
@@ -421,4 +447,5 @@ export default {
   color: rgba(255,255,255, 0.7);
   background: transparent;
 }
+
 </style>

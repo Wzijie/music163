@@ -140,6 +140,12 @@ img {
   background-size: cover;
 }
 
+.icon-delete {
+  width: 0.48rem;
+  height: 0.48rem;
+  background-image: url('./assets/images/icon-delete.png');
+}
+
 /*歌曲描述*/
 .song-descript {
   height: 0.66rem;

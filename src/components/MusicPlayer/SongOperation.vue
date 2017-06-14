@@ -8,7 +8,7 @@
         <i class="icon-download translate-center"></i>
       </li>
       <li>
-        <span class="comment-count translate-center">999+</span>
+        <span class="comment-count translate-center">{{ isMaxTotal }}</span>
         <i class="icon-comment_02 translate-center"></i>
       </li>
       <li>
@@ -19,11 +19,50 @@
 </template>
 
 <script>
+import ajaxRequest from '@/plugs/ajaxRequest';
 export default {
   name: 'song-operation',
+  props: [ 'songList', 'songIndex' ],
   data () {
     return {
-      
+      comments: [],
+      hotComments: [],
+      commentTotal: 0
+    }
+  },
+  computed: {
+    isMaxTotal () {
+      return this.commentTotal > 999 ? '999+' : this.commentTotal;
+    }
+  },
+  watch: {
+    songIndex () {
+      this.comments.splice(0, this.comments.length);
+      this.hotComments.splice(0, this.hotComments.length);
+      this.commentTotal = 0;
+      this.getComments((data) => {
+        console.log(data, '评论数据');
+        this.comments.push(...data.comments);
+        this.hotComments.push(...data.hotComments);
+        this.commentTotal = data.total;
+      });
+    }
+  },
+  mounted () {
+    this.getComments((data) => {
+      console.log(data, '评论数据');
+      this.comments.push(...data.comments);
+      this.hotComments.push(...data.hotComments);
+      this.commentTotal = data.total;
+    });
+  },
+  methods: {
+    getComments (successHandler) {
+      var commentError = (error) => {
+        console.log(error);
+      }
+      var commentURL = `http://localhost:3000/comment/music?id=${this.songList[this.songIndex].id}`;
+      ajaxRequest(commentURL, 'GET', successHandler, commentError);
     }
   }
 }

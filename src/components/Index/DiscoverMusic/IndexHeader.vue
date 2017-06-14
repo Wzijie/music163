@@ -1,29 +1,68 @@
 <template>
   <div class="header">
     <div class="search">
-      <span class="microphone">
+      <span class="microphone" v-show='!searchInputFocus'>
         <i class="icon-microphone"></i>
       </span>
-      <form>
+      <form :class='{ "focus-translate": searchInputFocus }'>
         <i class="icon-search"></i>
-        <input type="text" class="search-input" placeholder="搜索音乐、歌词、电台">
+        <input type="text" class="search-input" placeholder="搜索音乐、歌词、电台" spellcheck='false' @focus='changeSearchInputFocus(true)' :value='keyword' @input='changeKeyword($event.target.value)'>
+        <i class="icon icon-delete_02" v-show='!isKeywordEmpty' @click='changeKeyword("")'></i>
       </form>
-      <MusicPlayingLink></MusicPlayingLink>
+      <MusicPlayingLink v-show='!searchInputFocus'></MusicPlayingLink>
+      <span class="cancel-input" v-show='searchInputFocus' @click='changeSearchInputFocus(false)'>取消</span>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MusicPlayingLink from '@/components/MusicPlayingLink';
 export default {
   name: 'IndexHeader',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+    
     }
   },
   components: {
+    // 播放器routerLink
     'MusicPlayingLink': MusicPlayingLink
+  },
+  computed: {
+    ...mapState({
+      // 是否获焦
+      searchInputFocus (state) {
+        return state.SearchMessage.searchInputFocus;
+      },
+      // 关键字
+      keyword (state) {
+        return state.SearchMessage.keyword;
+      }
+    }),
+    // 关键字是否为空
+    isKeywordEmpty () {
+      return this.keyword === '';
+    }
+  },
+  watch: {
+    keyword () {
+
+    }
+  },
+  methods: {
+    // 改变获焦状态
+    changeSearchInputFocus (isFocus) {
+      this.$store.commit('SearchMessage/changeSearchInputFocus', {
+        data: isFocus
+      });
+    },
+    // 改变关键字
+    changeKeyword (newKeyword) {
+      this.$store.commit('SearchMessage/changeKeyword', {
+        data: newKeyword
+      });
+    }
   }
 }
 </script>
@@ -43,6 +82,7 @@ export default {
   align-items: center;
   height: 0.88rem;
   background: #d43c33;
+  position: relative;
 }
 
 .search .microphone {
@@ -64,18 +104,23 @@ export default {
 
 .search form {
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.search form.focus-translate {
+  transform: translateX(-0.6rem);
 }
 
 .search form .search-input {
   width: 6rem;
   height: 0.6rem;
-  padding: 0.05rem 0.2rem;
-  padding-left: 0.55rem;
+  padding: 0.05rem 0.4rem 0.05rem 0.55rem;
   box-sizing: border-box;
   border: 0;
   border-radius: 0.3rem;
   outline: none;
   font-size: 0.24rem;
+  color: #666;
 }
 .search form .search-input::-webkit-input-placeholder {
   /*text-align: center;*/
@@ -88,5 +133,19 @@ export default {
   background-size: cover;
   position: absolute;
   top: 0.16rem; left: 0.2rem;
+}
+
+.search form .icon-delete_02 {
+  width: 0.28rem;
+  height: 0.28rem;
+  background-image: url('../../../assets/images/icon-delete_02.png');
+  position: absolute;
+  top: 0.16rem; right: 0.1rem;
+}
+
+.search .cancel-input {
+  color: #fff;
+  position: absolute;
+  right: 0.3rem;
 }
 </style>

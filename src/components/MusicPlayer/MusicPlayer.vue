@@ -4,7 +4,7 @@
     <musicPlayerHeader :current-song='currentSong'></musicPlayerHeader>
     <VolumeControl></VolumeControl>
     <SongCover :song-album-cover='songAlbumCover'></SongCover>
-    <SongOperation></SongOperation>
+    <SongOperation :song-list='songList' :song-index='songIndex'></SongOperation>
     <AudioControl :song-list='songList' :song-index='songIndex'></AudioControl>
     <SongPlayList></SongPlayList>
     <BlackMask></BlackMask>

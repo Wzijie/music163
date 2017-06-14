@@ -18,6 +18,7 @@ const songSheet = {
   }
 }
 
+// 播放器
 const MusicPlayer = {
   namespaced: true,
   state: {
@@ -32,7 +33,9 @@ const MusicPlayer = {
     // 是否静音
     muted: false,
     // 是否显示音乐播放列表组件
-    isSongPlayListShow: false
+    isSongPlayListShow: false,
+    // 播放模式
+    playMode: 'listLoop'
   },
   mutations: {
     // 替换歌曲播放列表的歌曲
@@ -61,6 +64,43 @@ const MusicPlayer = {
     // 改变是否显示音乐播放列表组件
     isSongPlayListShowChange (state) {
       state.isSongPlayListShow = !state.isSongPlayListShow
+    },
+
+    // 改变播放模式
+    changePlayMode (state) {
+      if (state.playMode === 'listLoop') {
+        state.playMode = 'oneSongLoop';
+        return;
+      } 
+      if (state.playMode === 'oneSongLoop') {
+        state.playMode = 'randomPlay';
+        return;
+      }
+      if (state.playMode === 'randomPlay') {
+        state.playMode = 'listLoop';
+        return;
+      }
+    },
+
+    // 删除歌曲
+    deleteSong (state, payload) {
+      state.songList.splice(payload.data, 1);
+    }
+  }
+}
+
+const SearchMessage = {
+  namespaced: true,
+  state: {
+    searchInputFocus: false,
+    keyword: ''
+  },
+  mutations: {
+    changeSearchInputFocus (state, payload) {
+      state.searchInputFocus = payload.data;
+    },
+    changeKeyword (state, payload) {
+      state.keyword = payload.data;
     }
   }
 }
@@ -68,7 +108,8 @@ const MusicPlayer = {
 const store = new Vuex.Store({
   modules: {
     songSheet: songSheet,
-    MusicPlayer: MusicPlayer
+    MusicPlayer: MusicPlayer,
+    SearchMessage: SearchMessage
   }
 });
 
