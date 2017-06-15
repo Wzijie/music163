@@ -28,7 +28,7 @@ import RecommendMV from './RecommendMV';
 import FeaturedColumn from './FeaturedColumn';
 import AnchorStation from './AnchorStation';
 import SearchMessage from './SearchMessage';
-import SearchResult from './SearchResult';
+import SearchResult from './SearchResult/SearchResult';
 
 import ajaxRequest from '@/plugs/ajaxRequest.js';
 

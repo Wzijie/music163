@@ -4,13 +4,13 @@
       <span class="microphone" v-show='!searchInputFocus'>
         <i class="icon-microphone"></i>
       </span>
-      <form :class='{ "focus-translate": searchInputFocus }'>
+      <form :class='{ "focus-translate": searchInputFocus }' @submit='submitSearch'>
         <i class="icon-search"></i>
-        <input type="text" class="search-input" placeholder="搜索音乐、歌词、电台" spellcheck='false' @focus='changeSearchInputFocus(true)' :value='keyword' @input='changeKeyword($event.target.value)'>
+        <input type="text" class="search-input" placeholder="搜索音乐、歌词、电台" spellcheck='false' @focus='searchInputGetFocus' :value='keyword' @input='changeKeyword($event.target.value)'>
         <i class="icon icon-delete_02" v-show='!isKeywordEmpty' @click='changeKeyword("")'></i>
       </form>
       <MusicPlayingLink v-show='!searchInputFocus'></MusicPlayingLink>
-      <span class="cancel-input" v-show='searchInputFocus' @click='changeSearchInputFocus(false)'>取消</span>
+      <span class="cancel-input" v-show='searchInputFocus' @click='cancelSearch'>取消</span>
     </div>
   </div>
 </template>
@@ -52,15 +52,42 @@ export default {
   },
   methods: {
     // 改变获焦状态
-    changeSearchInputFocus (isFocus) {
+    searchInputGetFocus () {
       this.$store.commit('SearchMessage/changeSearchInputFocus', {
-        data: isFocus
+        data: true
+      });
+      this.$store.commit('SearchMessage/changeSearchResultDisplay', {
+        data: false
       });
     },
     // 改变关键字
     changeKeyword (newKeyword) {
       this.$store.commit('SearchMessage/changeKeyword', {
         data: newKeyword
+      });
+    },
+
+    // 确定提交搜索关键字搜索，显示搜索结果页面
+    submitSearch (event) {
+      event.preventDefault();
+      this.$store.commit('SearchMessage/changeKeyword', {
+        data: this.keyword
+      });
+      this.$store.commit('SearchMessage/changeSubmitSearchKeyword', {
+        data: this.keyword
+      });
+      this.$store.commit('SearchMessage/changeSearchResultDisplay', {
+        data: true
+      });
+    },
+
+    // 取消按钮，隐藏搜索面板
+    cancelSearch () {
+      this.$store.commit('SearchMessage/changeSearchInputFocus', {
+        data: false
+      });
+      this.$store.commit('SearchMessage/changeSearchResultDisplay', {
+        data: false
       });
     }
   }

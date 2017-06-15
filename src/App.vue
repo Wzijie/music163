@@ -146,6 +146,12 @@ img {
   background-image: url('./assets/images/icon-delete.png');
 }
 
+.icon-detail {
+  width: 0.4rem;
+  height: 0.1rem;
+  background-image: url('./assets/images/icon-detail.png');
+}
+
 /*歌曲描述*/
 .song-descript {
   height: 0.66rem;

@@ -40,7 +40,10 @@ const MusicPlayer = {
   mutations: {
     // 替换歌曲播放列表的歌曲
     addSongList (state, payload) {
-      state.songList.splice(0, state.songList.length, ...payload.data);
+      state.songList.push(...payload.data);
+    },
+    clearSongList (state) {
+      state.songList.splice(0, state.songList.length);
     },
     // 改变歌曲索引
     changeSongIndex (state, payload) {
@@ -93,7 +96,9 @@ const SearchMessage = {
   namespaced: true,
   state: {
     searchInputFocus: false,
-    keyword: ''
+    keyword: '',
+    searchResultDisplay: false,
+    submitSearchKeyword: ''
   },
   mutations: {
     changeSearchInputFocus (state, payload) {
@@ -101,6 +106,12 @@ const SearchMessage = {
     },
     changeKeyword (state, payload) {
       state.keyword = payload.data;
+    },
+    changeSearchResultDisplay (state, payload) {
+      state.searchResultDisplay = payload.data;
+    },
+    changeSubmitSearchKeyword (state, payload) {
+      state.submitSearchKeyword = payload.data;
     }
   }
 }

@@ -38,11 +38,11 @@
       </ul>
     </template>
     <div class="search-suggest" v-else>
-      <a class="direct-search text-overflow">搜索 “ {{ keyword }} ”</a>
+      <a class="direct-search text-overflow" @click='submitSearch(keyword)'>搜索 “ {{ keyword }} ”</a>
       <ul class="suggest-list">
         <li v-for='suggest in suggestList'>
           <i class="icon icon-search_02"></i>
-          <a class="text-overflow">{{ suggest.name }}</a>
+          <a class="text-overflow" @click='submitSearch(suggest.name)'>{{ suggest.name }}</a>
         </li>
       </ul>
     </div>
@@ -57,23 +57,28 @@ export default {
   name: 'search-message',
   data () {
     return {
+      // 搜索建议
       suggestList: []
     }
   },
   computed: {
     ...mapState({
+      // 搜索输入表单是否获焦
       searchInputFocus (state) {
         return state.SearchMessage.searchInputFocus;
       },
+      // 表单输入的搜索关键字
       keyword (state) {
         return state.SearchMessage.keyword;
       }
     }),
+    // 关键字是否为空
     isKeywordEmpty () {
       return this.keyword === '';
     }
   },
   watch: {
+    // 关键字变动则请求搜索建议
     keyword () {
       if (this.keyword === '') {
         return;
@@ -83,10 +88,13 @@ export default {
     }
   },
   methods: {
+    // 获取搜索建议
     getSuggestList () {
       var suggestSuccess = (data) => {
         console.log(data, '搜索建议');
         var tmparr = [];
+        // 搜索建议数据分为多个数组，搜索结果同时包含单曲,歌手,歌单,mv信息
+        // 将所有数组合并 ‘order’属性存放的不是需要的数据
         Object.keys(data.result).forEach((objkey) => {
           if (objkey === 'order') {
             return;
@@ -100,6 +108,18 @@ export default {
       }
       var suggestURL = `http://localhost:3000/search/suggest?keywords=${this.keyword}`;
       ajaxRequest(suggestURL, 'GET', suggestSuccess, suggestError);
+    },
+    // 确定提交搜索关键字搜索，显示搜索结果页面
+    submitSearch (keyword) {
+      this.$store.commit('SearchMessage/changeKeyword', {
+        data: keyword
+      });
+      this.$store.commit('SearchMessage/changeSubmitSearchKeyword', {
+        data: keyword
+      });
+      this.$store.commit('SearchMessage/changeSearchResultDisplay', {
+        data: true
+      });
     }
   }
 }

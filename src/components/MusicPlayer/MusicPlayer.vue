@@ -1,13 +1,16 @@
 <template>
   <div class="music-player">
-    <div class="blur-img" :style='{ "background-image": `url(${songAlbumCover})` }'></div>
-    <musicPlayerHeader :current-song='currentSong'></musicPlayerHeader>
-    <VolumeControl></VolumeControl>
-    <SongCover :song-album-cover='songAlbumCover'></SongCover>
-    <SongOperation :song-list='songList' :song-index='songIndex'></SongOperation>
-    <AudioControl :song-list='songList' :song-index='songIndex'></AudioControl>
-    <SongPlayList></SongPlayList>
-    <BlackMask></BlackMask>
+    <p class="loading-text" v-if='songList.length === 0'>正在加载...</p>
+    <template v-else>
+      <div class="blur-img" :style='{ "background-image": `url(${songAlbumCover})` }'></div>
+      <musicPlayerHeader :current-song='currentSong'></musicPlayerHeader>
+      <VolumeControl></VolumeControl>
+      <SongCover :song-album-cover='songAlbumCover'></SongCover>
+      <SongOperation :song-list='songList' :song-index='songIndex'></SongOperation>
+      <AudioControl :song-list='songList' :song-index='songIndex'></AudioControl>
+      <SongPlayList></SongPlayList>
+      <BlackMask></BlackMask>
+    </template>
   </div>
 </template>
 

@@ -11,7 +11,7 @@
             <p>播放全部<span class="song-count">(共{{ songsheetData.trackCount }}首)</span></p>
           </a>
           <span class="song-detail">
-            <i class="icon-detail"></i>
+            <i class="icon icon-detail"></i>
           </span>
         </div>
       </li>
@@ -70,6 +70,7 @@ export default {
     },
     // 添加歌曲列表
     addCurrentSongList: function () {
+      this.$store.commit('MusicPlayer/clearSongList');
       this.$store.commit('MusicPlayer/addSongList', {
         data: this.songsheetData.tracks
       });
@@ -156,13 +157,5 @@ export default {
   align-items: center;
   width: 1rem;
   height: 100%;
-}
-
-.song-list ul li .song-info .song-detail .icon-detail {
-  display: inline-block;
-  width: 0.4rem;
-  height: 0.1rem;
-  background: url('../../../assets/images/icon-detail.png') no-repeat;
-  background-size: cover;
 }
 </style>
