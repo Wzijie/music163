@@ -2,34 +2,30 @@
   <div class="search-result" v-show='searchResultDisplay'>
     <FilterOption></FilterOption>
     <div class="result-display">
-      <ul class="song-result">
-        <li v-for='song in searchResult'>
-          <a @click='linkSongPlay(song.id)'>
-            <p class="song-name text-overflow" v-html='replaceKeyword(replaceKeyword(song.name))'></p>
-            <p class="song-author-album text-overflow">
-              <i class="icon icon-sq"></i>
-              <span class="author" v-html='replaceKeyword(song.artists[0].name)'></span> 
-              - 
-              <span class="album" v-html='replaceKeyword(song.album.name)'></span></p>
-          </a>
-          <div class="detail">
-            <i class="icon icon-detail translate-center"></i>
-          </div>
-        </li>
-      </ul>
+      <!-- <SongResultList :song-result='songResult' :link-song-play='linkSongPlay' :replace-keyword='replaceKeyword'></SongResultList> -->
+      <!-- <SingerResultList :singer-result='singerResult'></SingerResultList> -->
+      <AlbumResultList :album-result='albumResult'></AlbumResultList>
     </div> 
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+
 import ajaxRequest from '@/plugs/ajaxRequest';
+
 import FilterOption from './FilterOption';
+import SongResultList from './SongResultList';
+import SingerResultList from './SingerResultList';
+import AlbumResultList from './AlbumResultList';
 export default {
   name: 'search-result',
   data () {
     return {
-      searchResult: []
+      type: '专辑',
+      songResult: [],
+      singerResult: [],
+      albumResult: []
     }
   },
   computed: {
@@ -42,30 +38,72 @@ export default {
       searchResultDisplay (state) {
         return state.SearchMessage.searchResultDisplay;
       }
-    })
+    }),
+    searchTypeParams () {
+      return this.typeDistribution({
+        song: 1,
+        album: 10,
+        singer: 100,
+        songsheet: 1000,
+        user: 1002,
+        mv: 1004,
+        lyric: 1006,
+        radioStation: 1009
+      });
+    },
+    requestResultHandler () {
+      return this.typeDistribution({
+        song: (data) => {
+          this.songResult.splice(0, this.songResult.length, ...data.result.songs);
+        }, 
+        album: (data) => {
+          this.albumResult.splice(0, this.albumResult.length, ...data.result.albums);
+        },
+        singer: (data) => {
+          this.singerResult.splice(0, this.singerResult.length, ...data.result.artists);
+        },
+        songsheet: (data) => {
+          
+        },
+        user: (data) => {
+          
+        },
+        mv: (data) => {
+          
+        },
+        lyric: (data) => {
+          
+        },
+        radioStation: (data) => {
+          
+        }
+      });
+    }
   },
   watch: {
     // 关键字变动重新请求搜索结果
     submitSearchKeyword () {
-      this.searchResult.splice(0, this.searchResult.length);
       this.getSearchResult();
     }
   },
   components: {
     // 搜索结果筛选列表
-    'FilterOption': FilterOption
+    'FilterOption': FilterOption,
+    'SongResultList': SongResultList,
+    'SingerResultList': SingerResultList,
+    'AlbumResultList': AlbumResultList
   },
   methods: {
     // 请求搜索结果
     getSearchResult () {
       var searchResultSuccess = (data) => {
         console.log(data, '搜索结果');
-        this.searchResult.push(...data.result.songs);
+        this.requestResultHandler(data);
       }
       var searchResultError = (error) => {
         console.log(error);
       }
-      var searchResultURL = `http://localhost:3000/search?keywords=${encodeURI(this.submitSearchKeyword)}`;
+      var searchResultURL = `http://localhost:3000/search?keywords=${encodeURI(this.submitSearchKeyword)}&type=${this.searchTypeParams}`;
       ajaxRequest(searchResultURL, 'GET', searchResultSuccess, searchResultError);
     },
     // 请求歌曲详情
@@ -98,6 +136,26 @@ export default {
       console.dir(songId);
       this.getSongDetail(songId);
       this.$router.push('/MusicPlayer');
+    },
+    typeDistribution (typeResult) {
+      switch (this.type) {
+        case '单曲':
+          return typeResult.song;
+        case '专辑':
+          return typeResult.album;
+        case '歌手':
+          return typeResult.singer;
+        case '歌单':
+          return typeResult.songsheet;
+        case '用户':
+          return typeResult.user;
+        case 'MV':
+          return typeResult.mv;
+        case '歌词':
+          return typeResult.lyric;
+        case '电台':
+          return typeResult.radioStation;
+      }
     }
   },
   mounted () {
@@ -123,46 +181,40 @@ export default {
   overflow: hidden;
 }
 
-.song-result {
+
+</style>
+
+<style>
+.result-list {
   height: 100%;
   overflow-y: scroll; 
   padding-bottom: 1rem;
   box-sizing: border-box;
 }
 
-.song-result li {
+.result-list li {
   display: flex;
   align-items: center;
-  border-bottom: 0.01rem solid #ccc;
   text-align: left;
 }
 
-.song-result li a {
-  display: block;
-  width: 100%;
-  padding: 0.05rem 0;
-  overflow: hidden;
+.most-result li {
+  height: 1.2rem;
 }
 
-.song-result li a p {
-  margin: 0.05rem 0;
+.most-result li div.cover {
+  width: 1.08rem;
+  min-width: 1.08rem;
+  height: 1.08rem;
 }
 
-.song-result li a .song-author-album {
-  font-size: 0.24rem;
-  color: #666;
-}
-
-.song-result li .detail {
-  width: 0.95rem;
-  min-width: 0.95rem;
-  height: 1rem;
-  position: relative;
-}
-
-.icon-sq {
-  width: 0.24rem;
-  height: 0.16rem;
-  background-image: url('../../../../assets/images/icon-sq.png');
+.most-result li a.info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  margin-left: 0.2rem;
+  border-bottom: 0.01rem solid #ccc;
+  box-sizing: border-box;
 }
 </style>
