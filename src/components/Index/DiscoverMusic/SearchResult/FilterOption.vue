@@ -1,26 +1,8 @@
 <template>
   <div class="filter-option" @touchmove='dragList' @touchstart='touchStartList' @touchend='touchEndList'>
     <ul class="option-list" :style='{ transform: `translateX(${diff / 100}rem)` }' :class='{ transition: isTransition }'>
-      <li>
-        <a class="active">单曲</a>
-      </li>
-      <li>
-        <a>歌手</a>
-      </li>
-      <li>
-        <a>专辑</a>
-      </li>
-      <li>
-        <a>歌单</a>
-      </li>
-      <li>
-        <a>MV</a>
-      </li>
-      <li>
-        <a>主播电台</a>
-      </li>
-      <li>
-        <a>用户</a>
+      <li v-for='(type, index) in filterType' @click='changeSearchType(type, index)'>
+        <a :class='{"active": index === searchFilterIndex}'>{{ type }}</a>
       </li>
     </ul>
   </div>
@@ -29,8 +11,11 @@
 <script>
 export default {
   name: 'filter-option',
+  props: [ 'searchFilterIndex' ],
   data () {
     return {
+      filterType: ['单曲', '歌手', '专辑', '歌单', 'MV', '主播电台', '用户'],
+
       // 列表拖动功能state start
       // 移动的距离
       diff: 0,
@@ -48,6 +33,15 @@ export default {
     }
   },
   methods: {
+    changeSearchType (type, index) {
+      this.$store.commit('SearchMessage/changeSearchType', {
+        data: type
+      });
+      this.$store.commit('SearchMessage/changeSearchFilterIndex', {
+        data: index
+      });
+    },
+
     // 列表拖动功能methods start
     touchStartList (event) {
       // touchstart记录X坐标、时间戳、取消过渡动画

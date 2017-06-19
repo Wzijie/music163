@@ -71,6 +71,7 @@ img {
 
 .section-list li a {
   display: block;
+  width: 100%;
 }
 
 .section-title {

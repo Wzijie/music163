@@ -5,7 +5,7 @@
         <img :src='singer.img1v1Url' :alt='singer.name'>
       </div>
       <a class="singer-info info">
-        <p class="singer-name">{{ singer.name }} <span v-if='isAlias(singer)'>({{ isAlias(singer) }})</span></p>
+        <p class="singer-name"><span v-html='replaceKeyword(singer.name)'></span> <span v-if='isAlias(singer)'>({{ isAlias(singer) }})</span></p>
         <div class="settled-in" v-if='isAccountId(singer)'>
           <span class="icon-box">
             <i class="icon icon-user_03 translate-center"></i>
@@ -20,7 +20,7 @@
 <script>
 export default {
   name: 'singer-result',
-  props: [ 'singerResult' ],
+  props: [ 'singerResult', 'replaceKeyword' ],
   data () {
     return {
 

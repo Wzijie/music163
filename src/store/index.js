@@ -92,26 +92,47 @@ const MusicPlayer = {
   }
 }
 
+// 搜索
 const SearchMessage = {
   namespaced: true,
   state: {
+    // 搜索表单是否获取焦点
     searchInputFocus: false,
+    // 输入的搜索关键字
     keyword: '',
+    // 搜索结果是否显示
     searchResultDisplay: false,
-    submitSearchKeyword: ''
+    // 确定搜索关键字
+    submitSearchKeyword: '',
+    // 搜索类型
+    searchType: '单曲',
+    // 搜索筛选类型索引
+    searchFilterIndex: 0
   },
   mutations: {
+    // 改变搜索表单是否获取焦点
     changeSearchInputFocus (state, payload) {
       state.searchInputFocus = payload.data;
     },
+    // 改变搜索关键字
     changeKeyword (state, payload) {
       state.keyword = payload.data;
     },
+    // 改变搜索结果是否显示
     changeSearchResultDisplay (state, payload) {
       state.searchResultDisplay = payload.data;
     },
+    // 改变确定的搜索关键字
     changeSubmitSearchKeyword (state, payload) {
       state.submitSearchKeyword = payload.data;
+    },
+    // 改变搜索类型
+    changeSearchType (state, payload) {
+      state.searchType = payload.data;
+    },
+    // 改变搜索筛选类型的索引
+    changeSearchFilterIndex (state, payload) {
+      state.searchFilterIndex = payload.data;
     }
   }
 }

@@ -21,16 +21,9 @@
         </ul>
       </div>
       <ul class="history-search">
-        <li>
+        <li v-for='history in historySearch'>
           <i class="icon icon-history"></i>
-          <a class="text-overflow">历史搜索</a>
-          <div class="delete">
-            <i class="icon icon-delete translate-center"></i>
-          </div>
-        </li>
-        <li>
-          <i class="icon icon-history"></i>
-          <a class="text-overflow">历史搜索</a>
+          <a class="text-overflow" @click='submitSearch(history)'>{{ history }}</a>
           <div class="delete">
             <i class="icon icon-delete translate-center"></i>
           </div>
@@ -58,7 +51,8 @@ export default {
   data () {
     return {
       // 搜索建议
-      suggestList: []
+      suggestList: [],
+      historySearch: localStorage.historySearch ? JSON.parse(localStorage.historySearch) : []
     }
   },
   computed: {
@@ -85,6 +79,9 @@ export default {
       }
       this.suggestList.splice(0, this.suggestList.length);
       this.getSuggestList();
+    },
+    historySearch () {
+      localStorage.historySearch = JSON.stringify(this.historySearch);
     }
   },
   methods: {
@@ -120,6 +117,9 @@ export default {
       this.$store.commit('SearchMessage/changeSearchResultDisplay', {
         data: true
       });
+      if (this.historySearch.indexOf(keyword) === -1) {
+        this.historySearch.push(keyword);
+      } 
     }
   }
 }

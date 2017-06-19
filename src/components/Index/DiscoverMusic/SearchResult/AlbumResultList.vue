@@ -6,8 +6,11 @@
         <i class="icon disc-bg_02"></i>
       </div>
       <a class="info">
-        <p class="album-name">{{ album.name }}</p>
-        <p class="author-and-time">{{ album.artist.name }} {{ translateTime(album.publishTime) }}</p>
+        <p class="album-name text-overflow" v-html='replaceKeyword(album.name)'></p>
+        <p class="author-and-time detail-info text-overflow">
+          <span class="author"  v-html='replaceKeyword(album.artist.name)'></span> 
+          <span class="time">{{ translateTime(album.publishTime) }}</span>
+        </p>
       </a>
     </li>
   </ul>
@@ -16,7 +19,7 @@
 <script>
 export default {
   name: 'album-result',
-  props: [ 'albumResult' ],
+  props: [ 'albumResult', 'replaceKeyword' ],
   data () {
     return {
 
@@ -49,22 +52,7 @@ export default {
 }
 
 .album-result li a.info {
-  flex-wrap: wrap;
-  align-content: center;
   margin-left: 0.4rem;
 }
 
-.album-result li a.info p {
-  width: 100%;
-  margin: 0.05rem 0;
-}
-
-.album-result li a.info p.album-name {
-  font-size: 0.32rem;
-}
-
-.album-result li a.info p.author-and-time {
-  font-size: 0.26rem;
-  color: #7d7d7f;
-}
 </style>
