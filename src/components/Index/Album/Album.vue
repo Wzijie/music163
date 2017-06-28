@@ -3,7 +3,8 @@
     <BlurBg :cover='albumCover'></BlurBg>
     <SongsheetHeader :songsheet-cover='albumCover' title='专辑'></SongsheetHeader>
     <AlbumInfo :album-data='albumData'  :album-cover='albumCover'></AlbumInfo>
-    <SongsheetOperation :songsheet-data='albumData'></SongsheetOperation>
+    <SongsheetOperation :songsheet-data='albumData.info'></SongsheetOperation>
+    <SongList :songsheet-data='albumData'></SongList>
   </div>
 </template>
 
@@ -19,7 +20,10 @@ export default {
   name: 'album',
   data () {
     return {
-      albumData: {},
+      albumData: {
+        trackCount: 0,
+        tracks: []
+      },
       albumCover: 'static/default-img.png'
     }
   },
@@ -33,6 +37,8 @@ export default {
   mounted () {
     var albumDataSuccess = (data) => {
       console.log(data);
+      this.albumData.trackCount = data.songs.length;
+      this.albumData.tracks.push(...data.songs);
       this.albumData = Object.assign({}, this.albumData, data.album);
       this.albumCover = data.album.picUrl;
     }

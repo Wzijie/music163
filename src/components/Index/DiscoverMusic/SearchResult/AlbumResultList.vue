@@ -5,13 +5,13 @@
         <img :src='album.picUrl' :alt='album.name'>
         <i class="icon disc-bg_02"></i>
       </div>
-      <a class="info">
+      <router-link class="info" :to='`Album/${album.id}`'>
         <p class="album-name text-overflow" v-html='replaceKeyword(album.name)'></p>
         <p class="author-and-time detail-info text-overflow">
           <span class="author"  v-html='replaceKeyword(album.artist.name)'></span> 
           <span class="time">{{ translateTime(album.publishTime) }}</span>
         </p>
-      </a>
+      </router-link>
     </li>
   </ul>
 </template>

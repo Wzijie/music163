@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     albumLoading: function () {
-      if (Object.keys(this.albumData).length !== 0) {
+      if (Object.keys(this.albumData).length !== 2) {
         return this.albumData;
       } else {
         return {

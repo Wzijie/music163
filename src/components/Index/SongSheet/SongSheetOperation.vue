@@ -40,14 +40,21 @@ export default {
   },
   computed: {
     songsheetInfoLoading: function () {
+      var loadingObj = {
+        subscribedCount: '正在加载...',
+        commentCount: '正在加载...',
+        shareCount: '正在加载...'
+      }
+      if (this.songsheetData === undefined) {
+        return loadingObj;
+      }
       if (Object.keys(this.songsheetData).length !== 0) {
+        if (this.songsheetData.subscribedCount === undefined) {
+          this.songsheetData.subscribedCount = 0;
+        }
         return this.songsheetData;
       } else {
-        return {
-          subscribedCount: '正在加载...',
-          commentCount: '正在加载...',
-          shareCount: '正在加载...'
-        }
+        return loadingObj;
       }
     }
   }
