@@ -4,7 +4,7 @@
     <p class="loading-text" v-if='loading'>正在加载...</p>
     <ul class="newmusic-list section-list" v-else>
       <li v-for='music in newestMusicData'>
-        <a href="###">
+        <router-link :to='`Album/${music.song.album.id}`'>
           <div class="newmusic-cover">
             <img :src='music.song.album.picUrl' :alt='music.name'>
           </div>
@@ -12,7 +12,7 @@
             <p class="newmusic-title">{{ music.name }}</p>
             <p class="newmusic-author">{{ music.song.artists[0].name }}</p>
           </div>
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>

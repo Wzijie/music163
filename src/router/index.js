@@ -11,6 +11,8 @@ import SongSheet from '@/components/Index/SongSheet/SongSheet';
 // 音乐播放
 import MusicPlayer from '@/components/MusicPlayer/MusicPlayer';
 
+import Album from '@/components/Index/Album/Album';
+
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +41,10 @@ export default new Router({
         {
           path: 'SongSheet/:id',
           component: SongSheet
+        },
+        {
+          path: 'Album/:id',
+          component: Album
         }
       ]
     },

@@ -68,7 +68,7 @@ export default {
     var bannerDataError = (error) => {
       console.log(error, '请求焦点图数据错误');
     }
-    var bannerDataURL = 'http://localhost:3000/banner';
+    var bannerDataURL = 'http://119.23.246.148:3001/banner';
 
     ajaxRequest(bannerDataURL, 'GET', bannerDataSuccess, bannerDataError);
 
@@ -84,7 +84,7 @@ export default {
     var recommendSongSheetError = (error) => {
       console.log(error, '请求推荐歌单数据错误');
     }
-    var recommendSongSheetURL = 'http://localhost:3000/personalized';
+    var recommendSongSheetURL = 'http://119.23.246.148:3001/personalized';
 
     ajaxRequest(recommendSongSheetURL, 'GET', recommendSongSheetSuccess, recommendSongSheetError);
 
@@ -96,7 +96,7 @@ export default {
     var exclusiveBroadcastError = (error) => {
       console.log(error, '请求独家放送数据错误');
     }
-    var exclusiveBroadcastURL = 'http://localhost:3000/personalized/privatecontent';
+    var exclusiveBroadcastURL = 'http://119.23.246.148:3001/personalized/privatecontent';
 
     ajaxRequest(exclusiveBroadcastURL, 'GET', exclusiveBroadcastSuccess, exclusiveBroadcastError);
 
@@ -108,7 +108,7 @@ export default {
     var newestMusicError = (error) => {
       console.log(error, '请求最新音乐数据错误');
     }
-    var newestMusicURL = 'http://localhost:3000/personalized/newsong';
+    var newestMusicURL = 'http://119.23.246.148:3001/personalized/newsong';
 
     ajaxRequest(newestMusicURL, 'GET', newestMusicSuccess, newestMusicError);
 
@@ -120,7 +120,7 @@ export default {
     var recommendMvError = (error) => {
       console.log(error, '请求推荐MV数据错误');
     }
-    var recommendMvURL = 'http://localhost:3000/personalized/mv';
+    var recommendMvURL = 'http://119.23.246.148:3001/personalized/mv';
 
     ajaxRequest(recommendMvURL, 'GET', recommendMvSuccess, recommendMvError);
 
@@ -132,7 +132,7 @@ export default {
     var featuredColumnError = (error) => {
       console.log(error, '请求精选专栏数据错误');
     }
-    var featuredColumnURL = 'http://localhost:3000/program/recommend';
+    var featuredColumnURL = 'http://119.23.246.148:3001/program/recommend';
 
     ajaxRequest(featuredColumnURL, 'GET', featuredColumnSuccess, featuredColumnError);
 
@@ -144,7 +144,7 @@ export default {
     var anchorStationError = (error) => {
       console.log(error, '请求主播电台数据错误');
     }
-    var anchorStationURL = 'http://localhost:3000/personalized/djprogram';
+    var anchorStationURL = 'http://119.23.246.148:3001/personalized/djprogram';
 
     ajaxRequest(anchorStationURL, 'GET', anchorStationSuccess, anchorStationError);
   }

@@ -3,6 +3,7 @@
     <div class="song-cover">
       <div class="disc-bg" :style='{ transform: transformRotate }'>
         <img class="cover translate-center" :src='songAlbumCover' :alt="pause">
+        <img src="static/disc-bg.png" alt="disc">
       </div>
       <transition name='fade'>
         <div v-show='isTipShow' class="playmode-tip">{{ playModeTipText }}</div>
@@ -119,8 +120,6 @@ export default {
   width: 5.74rem;
   height: 5.74rem;
   border-radius: 50%;
-  background: #000 url('../../assets/images/disc-bg.png') no-repeat;
-  background-size: cover;
   position: relative;
 }
 

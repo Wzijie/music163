@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import translateTime from '@/plugs/translateTime';
 export default {
   name: 'album-result',
   props: [ 'albumResult', 'replaceKeyword' ],
@@ -27,11 +28,7 @@ export default {
   },
   methods: {
     translateTime (timeStamp) {
-      var date = new Date(timeStamp);
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      return `${year}-${month + 1}-${day}`;
+      return translateTime(timeStamp);
     }
   }
 }

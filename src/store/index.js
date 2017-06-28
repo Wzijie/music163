@@ -27,7 +27,7 @@ const MusicPlayer = {
     // 当前播放歌曲的索引
     songIndex: -1,
     // 是否暂停
-    pause: null,
+    pause: true,
     // 音量
     volume: 1,
     // 是否静音
@@ -107,7 +107,9 @@ const SearchMessage = {
     // 搜索类型
     searchType: '单曲',
     // 搜索筛选类型索引
-    searchFilterIndex: 0
+    searchFilterIndex: 0,
+
+    historySearch: localStorage.historySearch ? JSON.parse(localStorage.historySearch) : []
   },
   mutations: {
     // 改变搜索表单是否获取焦点
@@ -133,6 +135,17 @@ const SearchMessage = {
     // 改变搜索筛选类型的索引
     changeSearchFilterIndex (state, payload) {
       state.searchFilterIndex = payload.data;
+    },
+    // 添加搜索历史
+    addHistorySearch (state, payload) {
+      if (state.historySearch.length === 5) {
+        state.historySearch.pop();
+      }
+      state.historySearch.unshift(payload.data);
+    },
+    // 删除搜索历史
+    deleteHistorySearch (state, payload) {
+      state.historySearch.splice(payload.data, 1);
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="header">
     <div class="blur-img" :style='{ "background-image": `url(${songsheetCover})` }'></div>
     <gobackLink></gobackLink>
-    <h2 class="songsheet-title">歌单</h2>
+    <h2 class="songsheet-title">{{ title }}</h2>
     <div class="music-playing">
       <MusicPlayingLink></MusicPlayingLink>
     </div>
@@ -15,7 +15,7 @@ import MusicPlayingLink from '@/components/MusicPlayingLink';
 import gobackLink from '@/components/gobackLink';
 export default {
   name: 'songsheet-header',
-  props: [ 'songsheetCover' ],
+  props: [ 'songsheetCover', 'title' ],
   data () {
     return {
       

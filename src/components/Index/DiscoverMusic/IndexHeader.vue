@@ -38,6 +38,10 @@ export default {
       // 关键字
       keyword (state) {
         return state.SearchMessage.keyword;
+      },
+      // 历史搜索
+      historySearch (state) {
+        return state.SearchMessage.historySearch;
       }
     }),
     // 关键字是否为空
@@ -79,6 +83,11 @@ export default {
       this.$store.commit('SearchMessage/changeSearchResultDisplay', {
         data: true
       });
+      if (this.historySearch.indexOf(this.keyword) === -1) {
+        this.$store.commit('SearchMessage/addHistorySearch', {
+          data: this.keyword
+        });
+      } 
     },
 
     // 取消按钮，隐藏搜索面板

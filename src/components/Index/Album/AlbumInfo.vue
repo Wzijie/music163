@@ -1,55 +1,48 @@
 <template>
   <div class="songsheet-info">
     <div class="songsheet-cover">
-      <img :src='songsheetCover' :alt='songsheetInfoLoading.name'>
-      <p class="play-count">
-        <i class="icon-headset"></i>
-        <span>{{ toTenThousandUnits(songsheetInfoLoading.playCount) }}</span>
-      </p>
+      <img :src='albumCover' :alt='albumLoading.name'>
       <i class="icon-detail-info">i</i>
     </div>
     <div class="songsheet-title-author">
-      <h2 class="title">{{ songsheetInfoLoading.name }}</h2>
+      <h2 class="title">{{ albumLoading.name }} <span v-if='albumLoading.transNames'>({{ albumLoading.transNames[0] }})</span></h2>
       <div class="author">
-        <div class="author-face">
-          <img :src='songsheetInfoLoading.creator.avatarUrl' :alt='songsheetInfoLoading.creator.nickname'>
-          <span class="author-label"></span>
-        </div>
-        <p class="author-name text-overflow">{{ songsheetInfoLoading.creator.nickname }}</p>
+        <p class="author-name text-overflow">歌手：{{ albumLoading.artist.name }}</p>
         <i class="icon-right-arrow">&gt;</i>
       </div>
+      <div class="publish-time">发行时间：{{ translateTime(albumLoading.publishTime) }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import translateTime from '@/plugs/translateTime';
 export default {
   name: 'songsheet-info',
-  props: [ 'songsheetData', 'songsheetCover' ],
+  props: [ 'albumData', 'albumCover' ],
   data () {
     return {
       
     }
   },
   computed: {
-    songsheetInfoLoading: function () {
-      if (Object.keys(this.songsheetData).length !== 0) {
-        return this.songsheetData;
+    albumLoading: function () {
+      if (Object.keys(this.albumData).length !== 0) {
+        return this.albumData;
       } else {
         return {
           name: '正在加载...',
-          playCount: 0,
-          creator: {
-            avatarUrl: 'static/default-img.png',
-            nickname: '正在加载...'
+          publishTime: 1498579200007,
+          artist: {
+            name: '正在加载...'
           }
         }
       }
     }
   },
   methods: {
-    toTenThousandUnits: function (num) {
-      return num > 100000 ? (num / 10000).toFixed(1) + '万' : num;
+    translateTime (timeStamp) {
+      return translateTime(timeStamp);
     }
   }
 }
@@ -125,29 +118,15 @@ export default {
   margin-top: 0.1rem;
 }
 
-.songsheet-info .songsheet-title-author .author .author-face {
-  width: 0.6rem;
-  height: 0.6rem;
-  position: relative;
-}
-
-.songsheet-info .songsheet-title-author .author .author-face img {
-  border-radius: 50%;
-}
-
-.songsheet-info .songsheet-title-author .author .author-face .author-label {
-  display: inline-block;
-  width: 0.24rem;
-  height: 0.24rem;
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 0; right: -0.08rem;
-}
-
 .songsheet-info .songsheet-title-author .author .author-name {
   max-width: 2.8rem;
   font-size: 0.28rem;
   margin: 0 0.1rem;
+}
+
+.songsheet-info .songsheet-title-author .publish-time {
+  font-size: 0.28rem;
+  color: #ddd;
+  text-align: left;
 }
 </style>

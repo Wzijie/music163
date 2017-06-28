@@ -61,7 +61,7 @@ export default {
       var commentError = (error) => {
         console.log(error);
       }
-      var commentURL = `http://localhost:3000/comment/music?id=${this.songList[this.songIndex].id}`;
+      var commentURL = `http://119.23.246.148:3001/comment/music?id=${this.songList[this.songIndex].id}`;
       ajaxRequest(commentURL, 'GET', successHandler, commentError);
     }
   }

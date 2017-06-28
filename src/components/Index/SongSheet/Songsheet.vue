@@ -1,7 +1,7 @@
 <template>
   <div class="song-sheet">
-    <BlurBg :songsheet-cover='songsheetCover'></BlurBg>
-    <songsheetHeader :songsheet-cover='songsheetCover'></songsheetHeader>
+    <BlurBg :cover='songsheetCover'></BlurBg>
+    <SongsheetHeader :songsheet-cover='songsheetCover' title='歌单'></SongsheetHeader>
     <SongsheetInfo :songsheet-data='songsheetData'  :songsheet-cover='songsheetCover'></SongsheetInfo>
     <SongsheetOperation :songsheet-data='songsheetData'></SongsheetOperation>
     <SongList :songsheet-data='songsheetData'></SongList>
@@ -21,12 +21,12 @@ export default {
   data () {
     return {
       songsheetData: {},
-      songsheetCover: '/static/default-img.png'
+      songsheetCover: 'static/default-img.png'
     }
   },
   components: {
     'BlurBg': BlurBg,
-    'songsheetHeader': Header,
+    'SongsheetHeader': Header,
     'SongsheetInfo': SongsheetInfo,
     'SongsheetOperation': SongsheetOperation,
     'SongList': SongList
@@ -54,7 +54,7 @@ export default {
       console.log(error);
     }
     console.log(this.$route.params.id);
-    var songsheetURL = `http://localhost:3000/playlist/detail?id=${this.$route.params.id}`;
+    var songsheetURL = `http://119.23.246.148:3001/playlist/detail?id=${this.$route.params.id}`;
 
     ajaxRequest(songsheetURL, 'GET', songsheetSuccess, songsheetError);
 
@@ -68,7 +68,7 @@ export default {
       var songsheetCoverError = (error) => {
         console.log(error);
       }
-      var songsheetCoverURL = `http://localhost:3000/songsheetCover?id=${this.$route.params.id}`;
+      var songsheetCoverURL = `http://119.23.246.148:3001/songsheetCover?id=${this.$route.params.id}`;
 
       ajaxRequest(songsheetCoverURL, 'GET', songsheetCoverSuccess, songsheetCoverError);
     }

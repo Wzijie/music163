@@ -23,7 +23,7 @@
             <p class="song-author-info text-overflow">{{ singerName(song.ar) }} - {{ song.al.name }}</p>
           </a>
           <span class="song-detail">
-            <i class="icon-detail"></i>
+            <i class="icon icon-detail"></i>
           </span>
         </div>
       </li>

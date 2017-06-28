@@ -1,6 +1,6 @@
 <template>
   <div class="blur-bg">
-    <div class="blur-img" :style='{ "background-image": `url(${songsheetCover})` }'></div>
+    <div class="blur-img" :style='{ "background-image": `url(${cover})` }'></div>
     <div class="mask"></div>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'blur-bg',
-  props: [ 'songsheetCover' ],
+  props: [ 'cover' ],
   data () {
     return {
       

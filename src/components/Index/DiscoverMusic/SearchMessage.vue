@@ -11,20 +11,14 @@
       <div class="hot-search">
         <h2>热门搜索</h2>
         <ul class="hot-search-list">
-          <li>热门搜索</li>
-          <li>热门搜索</li>
-          <li>热门搜索</li>
-          <li>热门搜索</li>
-          <li>热门搜索</li>
-          <li>热门搜索</li>
-          <li>热门搜索</li>
+          <li v-for='hot in hotSearch' @click='submitSearch(hot)'>{{ hot }}</li>
         </ul>
       </div>
       <ul class="history-search">
-        <li v-for='history in historySearch'>
+        <li v-for='(history, index) in historySearch'>
           <i class="icon icon-history"></i>
           <a class="text-overflow" @click='submitSearch(history)'>{{ history }}</a>
-          <div class="delete">
+          <div class="delete" @click='deleteHistorySearch(index)'>
             <i class="icon icon-delete translate-center"></i>
           </div>
         </li>
@@ -52,7 +46,8 @@ export default {
     return {
       // 搜索建议
       suggestList: [],
-      historySearch: localStorage.historySearch ? JSON.parse(localStorage.historySearch) : []
+      hotSearch: ['周杰伦', '天空之城', '风之谷']
+      // historySearch: localStorage.historySearch ? JSON.parse(localStorage.historySearch) : []
     }
   },
   computed: {
@@ -64,6 +59,10 @@ export default {
       // 表单输入的搜索关键字
       keyword (state) {
         return state.SearchMessage.keyword;
+      },
+
+      historySearch (state) {
+        return state.SearchMessage.historySearch;
       }
     }),
     // 关键字是否为空
@@ -103,23 +102,36 @@ export default {
       var suggestError = (error) => {
         console.log(error);
       }
-      var suggestURL = `http://localhost:3000/search/suggest?keywords=${this.keyword}`;
+      var suggestURL = `http://119.23.246.148:3001/search/suggest?keywords=${this.keyword}`;
       ajaxRequest(suggestURL, 'GET', suggestSuccess, suggestError);
     },
     // 确定提交搜索关键字搜索，显示搜索结果页面
     submitSearch (keyword) {
+      // 改变当前搜索关键字
       this.$store.commit('SearchMessage/changeKeyword', {
         data: keyword
       });
+      // 确定搜索关键字
       this.$store.commit('SearchMessage/changeSubmitSearchKeyword', {
         data: keyword
       });
+      // 显示搜索结果
       this.$store.commit('SearchMessage/changeSearchResultDisplay', {
         data: true
       });
+      // 添加搜索历史
       if (this.historySearch.indexOf(keyword) === -1) {
-        this.historySearch.push(keyword);
+        this.$store.commit('SearchMessage/addHistorySearch', {
+          data: keyword
+        });
       } 
+    },
+
+    // 删除搜索历史
+    deleteHistorySearch (index) {
+      this.$store.commit('SearchMessage/deleteHistorySearch', {
+        data: index
+      });
     }
   }
 }

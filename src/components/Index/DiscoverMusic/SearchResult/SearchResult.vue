@@ -140,7 +140,7 @@ export default {
       var searchResultError = (error) => {
         console.log(error);
       }
-      var searchResultURL = `http://localhost:3000/search?keywords=${encodeURI(this.submitSearchKeyword)}&type=${this.searchTypeParams}`;
+      var searchResultURL = `http://119.23.246.148:3001/search?keywords=${encodeURI(this.submitSearchKeyword)}&type=${this.searchTypeParams}`;
       ajaxRequest(searchResultURL, 'GET', searchResultSuccess, searchResultError);
     },
     // 请求歌曲详情
@@ -157,7 +157,7 @@ export default {
       var songDetailError = (error) => {
         console.log(error);
       }
-      var songDetailURL = `http://localhost:3000/song/detail?ids=${songId}`;
+      var songDetailURL = `http://119.23.246.148:3001/song/detail?ids=${songId}`;
       ajaxRequest(songDetailURL, 'GET', songDetailSuccess, songDetailError);
     },
     // 将字符中的关键字替换成高亮显示字体
@@ -207,7 +207,7 @@ export default {
     }
   },
   mounted () {
-    this.getSearchResult();
+    // this.getSearchResult();
   }
 }
 </script>

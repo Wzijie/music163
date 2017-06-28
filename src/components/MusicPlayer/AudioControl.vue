@@ -28,7 +28,7 @@
           <i class="icon-play-list"></i>
         </li>
       </ul> 
-      <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate' @progress='changeProgressBuffer' @waiting='waitingBuffering' @ended='audioEnded'></audio>
+      <audio :src='songUrl' preload='auto' @canplay='audioCanplay' @timeupdate='audioTimeupdate' @progress='changeProgressBuffer' @waiting='waitingBuffering' @ended='audioEnded' @loadstart='loadstart' @playing='playing'></audio>
     </template>
   </div>
 </template>
@@ -123,22 +123,23 @@ export default {
       var getSongError = (error) => {
         console.log(error);
       }
-      var getSongRequestURL = `http://localhost:3000/music/url?id=${songId}`;
+      var getSongRequestURL = `http://119.23.246.148:3001/music/url?id=${songId}`;
       ajaxRequest(getSongRequestURL, 'GET', getSongSuccess, getSongError);
     },
 
     // 音频可播放时执行
     audioCanplay (event) {
-      console.dir(event.target, 'Canplay');
+      console.log('canplay');
+      console.log(this.pause);
       // 开始播放并设置相应状态
       this.audio = event.target;
       this.durationTime = this.audio.duration;
-      this.audio.play();
+      // this.audio.play();
       this.isWaiting = false;
       // this.pause = false;
-      this.$store.commit('MusicPlayer/changePlayState', {
-        data: false
-      });
+      // this.$store.commit('MusicPlayer/changePlayState', {
+      //   data: false 
+      // });
     },
     // 秒 转换为 '分:秒'
     // 100 ===> '01:40'
@@ -227,6 +228,7 @@ export default {
       });
     },
 
+    // 播放模式
     playModeHandler () {
       var songIndex = null;
       switch (this.playMode) {
@@ -245,6 +247,7 @@ export default {
       }
     },
 
+    // 播放结束
     audioEnded (event) {
       console.log('audioEnded');
       this.playModeHandler();
@@ -255,6 +258,11 @@ export default {
       if (songIndex >= this.songList.length || songIndex < 0) {
         return;
       }
+      this.audio.pause();
+      // this.pause = true;
+      this.$store.commit('MusicPlayer/changePlayState', {
+        data: true
+      });
       // this.songUrl = '';
       // this.getSongURL(this.songList[songIndex].id);
       // this.$store.commit('MusicPlayer/changePlayState', {
@@ -287,6 +295,20 @@ export default {
           return randomPlayReturn;
         default: break;
       }
+    },
+
+    loadstart (event) {
+      console.log('loadstart');
+      this.audio = event.target;
+    },
+
+    playing () {
+      if (this.audio === null) {
+        return;
+      }
+      this.$store.commit('MusicPlayer/changePlayState', {
+        data: false
+      });
     }
 
   },
